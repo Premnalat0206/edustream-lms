@@ -1,0 +1,31 @@
+﻿id,title,content,video_url,course
+1,Introduction to Python,Learn Python basics including variables data types and operators,https://www.youtube.com/watch?v=t2_Q2BRzeEE,Complete Python Bootcamp
+2,Python Functions,Understand functions arguments return statements and scope,https://www.youtube.com/embed/_uQrJ0TkZlc,Complete Python Bootcamp
+3,Object Oriented Python,Learn classes objects inheritance and encapsulation,https://www.youtube.com/embed/JeznW_7DlB0,Complete Python Bootcamp
+4,AWS Introduction,Understand cloud computing and AWS core services,https://www.youtube.com/embed/ulprqHHWlng,AWS Cloud Computing
+5,EC2 and S3,Learn virtual servers and cloud storage in AWS,https://www.youtube.com/embed/Ia-UEYYR44s,AWS Cloud Computing
+6,AWS Deployment,Deploy applications using AWS infrastructure,https://www.youtube.com/embed/3hLmDS179YE,AWS Cloud Computing
+7,Cybersecurity Basics,Learn cyber threats malware and phishing concepts,https://www.youtube.com/embed/U_P23SqJaDc,Cybersecurity & Ethical Hacking
+8,Network Security,Understand firewalls encryption and secure communication,https://www.youtube.com/embed/inWWhr5tnEA,Cybersecurity & Ethical Hacking
+9,Ethical Hacking Tools,Learn penetration testing and ethical hacking tools,https://www.youtube.com/embed/U_P23SqJaDc,Cybersecurity & Ethical Hacking
+10,HTML Basics,Learn HTML tags structure and webpage creation,https://www.youtube.com/embed/pQN-pnXPaVg,Full Stack Web Development
+11,CSS Styling,Understand colors flexbox grid and responsive design,https://www.youtube.com/embed/1Rs2ND1ryYc,Full Stack Web Development
+12,Responsive Web Design,Build mobile responsive modern websites,https://www.youtube.com/embed/pQN-pnXPaVg,Full Stack Web Development
+13,Java Introduction,Understand Java syntax variables and loops,https://www.youtube.com/embed/eIrMbAQSU34,Core Java Programming
+14,OOP in Java,Learn inheritance polymorphism and abstraction,https://www.youtube.com/embed/grEKMHGYyns,Core Java Programming
+15,Java Collections,Learn ArrayList HashMap and collection framework,https://www.youtube.com/embed/eIrMbAQSU34,Core Java Programming
+16,Machine Learning Intro,Understand supervised and unsupervised learning,https://www.youtube.com/embed/GwIo3gDZCVQ,Machine Learning Masterclass
+17,Data Preprocessing,Clean and prepare datasets for ML models,https://www.youtube.com/embed/GwIo3gDZCVQ,Machine Learning Masterclass
+18,Model Training,Train and evaluate machine learning models,https://www.youtube.com/embed/GwIo3gDZCVQ,Machine Learning Masterclass
+19,SQL Introduction,Learn SQL syntax and basic queries,https://www.youtube.com/embed/HXV3zeQKqGY,Data Analysis with Python
+20,SQL Joins,Understand INNER JOIN LEFT JOIN and RIGHT JOIN,https://www.youtube.com/embed/HXV3zeQKqGY,Data Analysis with Python
+21,Database Queries,Learn data filtering grouping and ordering,https://www.youtube.com/embed/HXV3zeQKqGY,Data Analysis with Python
+22,React Basics,Learn components JSX and props in React,https://www.youtube.com/embed/bMknfKXIFA8,React.js Frontend Development
+23,React Hooks,Understand useState useEffect and hooks lifecycle,https://www.youtube.com/embed/O6P86uwfdR0,React.js Frontend Development
+24,React Routing,Build multi page applications using React Router,https://www.youtube.com/embed/bMknfKXIFA8,React.js Frontend Development
+25,AI Fundamentals,Learn artificial intelligence concepts and applications,https://www.youtube.com/embed/aircAruvnKk,Introduction to Artificial Intelligence
+26,Neural Networks,Understand neurons layers and activation functions,https://www.youtube.com/embed/aircAruvnKk,Introduction to Artificial Intelligence
+27,AI Projects,Build beginner AI powered applications,https://www.youtube.com/embed/aircAruvnKk,Introduction to Artificial Intelligence
+28,TensorFlow Basics,Learn tensors models and TensorFlow workflows,https://www.youtube.com/embed/tPYj3fFJGjk,Deep Learning with TensorFlow
+29,CNN Introduction,Understand convolutional neural networks and image processing,https://www.youtube.com/embed/YRhxdVk_sIs,Deep Learning with TensorFlow
+30,RNN and LSTM,Learn recurrent neural networks and sequence modeling,https://www.youtube.com/embed/tPYj3fFJGjk,Deep Learning with TensorFlow

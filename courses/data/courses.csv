@@ -1,0 +1,7 @@
+id,title,content,video_url,course
+1,Python Introduction,Introduction to Python programming.,https://www.youtube.com/watch?v=_uQrJ0TkZlc,1
+2,Variables and Data Types,Understanding Python variables.,https://www.youtube.com/watch?v=khKv-8q7YmY,1
+3,Control Flow,Using loops and conditions.,https://www.youtube.com/watch?v=Z1Yd7upQsXY,1
+4,Java Introduction,Overview of Java programming.,https://www.youtube.com/watch?v=eIrMbAQSU34,2
+5,Classes and Objects,Object oriented programming in Java.,https://www.youtube.com/watch?v=pTB0EiLXUC8,2
+6,Inheritance and Polymorphism,Advanced OOP concepts.,https://www.youtube.com/watch?v=0xw06loTm1k,2

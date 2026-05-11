@@ -1,0 +1,37 @@
+{% extends "courses/base.html" %}
+
+{% block content %}
+
+<div class="container mt-5 text-center">
+
+<h2 class="mb-4">Quiz Result</h2>
+
+<div class="card shadow p-4">
+
+<h3>Your Score</h3>
+
+<h1 class="display-4">{{ score }} / {{ total }}</h1>
+
+{% if score >= total|divisibleby:2 %}
+
+<div class="alert alert-success mt-4">
+🎉 Congratulations! You passed the quiz.
+</div>
+
+{% else %}
+
+<div class="alert alert-danger mt-4">
+❌ You did not pass. Try again.
+</div>
+
+{% endif %}
+
+<a href="{% url 'my_courses' %}" class="btn btn-primary mt-3">
+Back to My Courses
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

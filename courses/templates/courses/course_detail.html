@@ -1,0 +1,74 @@
+{% extends "courses/base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+<h1 class="mb-3">{{ course.title }}</h1>
+
+<p class="mb-4">{{ course.description }}</p>
+
+<h4 class="mt-4">Course Progress: {{ progress }}%</h4>
+
+<div class="progress mb-4">
+    <div class="progress-bar bg-success" role="progressbar" style="width: {{ progress }}%">
+        {{ progress }}%
+    </div>
+</div>
+
+<h3 class="mb-3">Lessons</h3>
+
+{% for lesson in lessons %}
+
+<div class="card mb-4 shadow">
+
+<div class="card-body">
+
+<h5 class="card-title">{{ lesson.title }}</h5>
+
+<p class="card-text">{{ lesson.content }}</p>
+
+<div class="ratio ratio-16x9 mb-3 shadow rounded">
+<iframe
+  width="100%"
+  height="400"
+  src="{{ lesson.video_url }}"
+  frameborder="0"
+  allowfullscreen>
+</iframe>
+</div>
+
+<form method="POST" action="{% url 'complete_lesson' lesson.id %}">
+{% csrf_token %}
+<button class="btn btn-success">
+Mark as Completed
+</button>
+</form>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+<div class="text-center mt-5">
+
+{% if progress == 100 %}
+
+<a href="{% url 'quiz' course.id %}" class="btn btn-success btn-lg">
+Take Final Quiz
+</a>
+
+{% else %}
+
+<button class="btn btn-secondary btn-lg" disabled>
+Complete all lessons to unlock quiz
+</button>
+
+{% endif %}
+
+</div>
+
+</div>
+
+{% endblock %}

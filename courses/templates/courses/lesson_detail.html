@@ -1,0 +1,51 @@
+<div class="card shadow border-0 mb-4">
+
+    <div class="card-body">
+
+        <h4 class="fw-bold mb-3">
+            {{ lesson.title }}
+        </h4>
+
+        <!-- VIDEO THUMBNAIL -->
+
+        <div class="position-relative">
+
+            <img 
+                src="https://img.youtube.com/vi/{{ lesson.video_url|slice:'32:43' }}/hqdefault.jpg"
+                class="img-fluid rounded w-100"
+                style="height:500px; object-fit:cover;"
+            >
+
+            <!-- WATCH BUTTON -->
+
+            <div class="position-absolute top-50 start-50 translate-middle">
+
+                <a href="{{ lesson.video_url }}"
+                   target="_blank"
+                   class="btn btn-danger btn-lg">
+
+                    ▶ Watch on YouTube
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <p class="mt-4">
+            {{ lesson.content }}
+        </p>
+
+        <form method="POST" action="{% url 'complete_lesson' lesson.id %}">
+
+            {% csrf_token %}
+
+            <button class="btn btn-success">
+                Mark as Completed
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
