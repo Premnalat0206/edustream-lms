@@ -2,73 +2,345 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container py-4">
 
-<h1 class="mb-3">{{ course.title }}</h1>
+    <!-- COURSE HERO -->
 
-<p class="mb-4">{{ course.description }}</p>
+    <div class="course-hero mb-5">
 
-<h4 class="mt-4">Course Progress: {{ progress }}%</h4>
+        <div class="hero-content">
 
-<div class="progress mb-4">
-    <div class="progress-bar bg-success" role="progressbar" style="width: {{ progress }}%">
-        {{ progress }}%
+            <span class="course-badge">
+                Premium Learning
+            </span>
+
+            <h1 class="course-title">
+                {{ course.title }}
+            </h1>
+
+            <p class="course-description">
+                {{ course.description }}
+            </p>
+
+            <!-- PROGRESS -->
+
+            <div class="progress-section mt-4">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <strong>Course Progress</strong>
+
+                    <strong>{{ progress }}%</strong>
+
+                </div>
+
+                <div class="progress modern-progress">
+
+                    <div class="progress-bar bg-success"
+                         role="progressbar"
+                         style="width: {{ progress }}%">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-</div>
 
-<h3 class="mb-3">Lessons</h3>
+    <!-- LESSONS -->
 
-{% for lesson in lessons %}
+    <div class="mb-5">
 
-<div class="card mb-4 shadow">
+        <div class="section-header">
 
-<div class="card-body">
+            <h2>
+                Course Lessons 🎥
+            </h2>
 
-<h5 class="card-title">{{ lesson.title }}</h5>
+        </div>
 
-<p class="card-text">{{ lesson.content }}</p>
+        {% for lesson in lessons %}
 
-<div class="ratio ratio-16x9 mb-3 shadow rounded">
-<iframe
-  width="100%"
-  height="400"
-  src="{{ lesson.video_url }}"
-  frameborder="0"
-  allowfullscreen>
-</iframe>
-</div>
+        <div class="lesson-card mb-5">
 
-<form method="POST" action="{% url 'complete_lesson' lesson.id %}">
-{% csrf_token %}
-<button class="btn btn-success">
-Mark as Completed
-</button>
-</form>
+            <div class="lesson-header">
 
-</div>
+                <h3 class="lesson-title">
+                    {{ lesson.title }}
+                </h3>
 
-</div>
+                <span class="lesson-badge">
+                    Lesson {{ forloop.counter }}
+                </span>
 
-{% endfor %}
+            </div>
 
-<div class="text-center mt-5">
+            <p class="lesson-content">
+                {{ lesson.content }}
+            </p>
 
-{% if progress == 100 %}
+            <!-- VIDEO -->
 
-<a href="{% url 'quiz' course.id %}" class="btn btn-success btn-lg">
-Take Final Quiz
+            <div class="ratio ratio-16x9 mb-4 video-wrapper">
+
+                <iframe
+                    src="{{ lesson.video_url }}"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+
+            </div>
+
+            <!-- COMPLETE BUTTON -->
+
+            <form method="POST"
+                  action="{% url 'complete_lesson' lesson.id %}">
+
+                {% csrf_token %}
+
+                <button class="btn complete-btn">
+
+                    ✅ Mark as Completed
+
+                </button>
+
+            </form>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- FINAL QUIZ SECTION -->
+
+    <div class="unlock-section text-center mb-5">
+
+        {% if progress == 100 %}
+
+        <div class="unlock-card success-card">
+
+            <h2 class="mb-3">
+                🎉 Course Completed Successfully!
+            </h2>
+
+            <p class="mb-4">
+                You have unlocked the final assessment and certificate.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+
+                <a href="{% url 'quiz' course.id %}"
+                   class="btn action-btn quiz-btn">
+
+                    Take Final Quiz
+
+                </a>
+
+                {% if quiz_passed %}
+
+<a href="{% url 'generate_certificate' course.id %}"
+   class="btn action-btn certificate-btn">
+
+    Download Certificate
+
 </a>
 
 {% else %}
 
-<button class="btn btn-secondary btn-lg" disabled>
-Complete all lessons to unlock quiz
+<button class="btn action-btn certificate-btn opacity-50"
+        disabled>
+
+    Pass Quiz to Unlock Certificate
+
 </button>
 
 {% endif %}
 
-</div>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="unlock-card locked-card">
+
+            <h2 class="mb-3">
+                🔒 Final Quiz Locked
+            </h2>
+
+            <p>
+                Complete all lessons to unlock the final quiz and certificate.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
 
 </div>
+
+<style>
+
+.course-hero{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    padding:60px;
+    border-radius:28px;
+    color:white;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.course-badge{
+    background:rgba(255,255,255,0.2);
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.course-title{
+    font-size:48px;
+    font-weight:700;
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.course-description{
+    font-size:18px;
+    max-width:900px;
+    opacity:0.95;
+}
+
+.modern-progress{
+    height:14px;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.section-header h2{
+    font-weight:700;
+    color:#111827;
+}
+
+.lesson-card{
+    background:white;
+    border-radius:24px;
+    padding:35px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.lesson-card:hover{
+    transform:translateY(-5px);
+}
+
+.lesson-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.lesson-title{
+    font-weight:700;
+    color:#111827;
+}
+
+.lesson-badge{
+    background:#eef2ff;
+    color:#4f46e5;
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.lesson-content{
+    color:#6b7280;
+    font-size:16px;
+    margin-bottom:25px;
+}
+
+.video-wrapper{
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.complete-btn{
+    background:linear-gradient(135deg,#059669,#10b981);
+    color:white;
+    border:none;
+    padding:12px 24px;
+    border-radius:12px;
+    font-weight:600;
+}
+
+.complete-btn:hover{
+    color:white;
+    transform:translateY(-2px);
+}
+
+.unlock-card{
+    padding:50px;
+    border-radius:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.success-card{
+    background:linear-gradient(135deg,#ecfdf5,#d1fae5);
+}
+
+.locked-card{
+    background:#f3f4f6;
+}
+
+.action-btn{
+    padding:14px 28px;
+    border-radius:14px;
+    font-weight:600;
+    border:none;
+}
+
+.quiz-btn{
+    background:#111827;
+    color:white;
+}
+
+.quiz-btn:hover{
+    color:white;
+}
+
+.certificate-btn{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+}
+
+.certificate-btn:hover{
+    color:white;
+}
+
+@media(max-width:768px){
+
+    .course-hero{
+        padding:35px;
+    }
+
+    .course-title{
+        font-size:34px;
+    }
+
+    .lesson-card{
+        padding:25px;
+    }
+
+}
+
+</style>
 
 {% endblock %}

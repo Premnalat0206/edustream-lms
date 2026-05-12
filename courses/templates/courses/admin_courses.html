@@ -1,0 +1,265 @@
+{% extends 'courses/base.html' %}
+
+{% block content %}
+
+<style>
+
+.admin-course-wrapper{
+background:rgba(17,24,39,0.95);
+border-radius:30px;
+padding:40px;
+color:white;
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
+}
+
+.page-title{
+font-size:50px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.page-subtitle{
+color:#9ca3af;
+margin-bottom:35px;
+}
+
+.top-bar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:35px;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.add-btn{
+background:linear-gradient(135deg,#4f46e5,#7c3aed);
+border:none;
+padding:14px 24px;
+border-radius:16px;
+font-weight:600;
+font-size:18
+transition:0.3s;
+color:white;
+text-decoration:none;
+display:inline-block;
+}
+
+.add-btn:hover{
+transform:translateY(-3px);
+}
+
+.course-table{
+background:rgba(255,255,255,0.05);
+border-radius:24px;
+overflow:hidden;
+}
+
+.table{
+margin-bottom:0;
+color:white;
+}
+
+.table thead{
+background:rgba(255,255,255,0.08);
+}
+
+.table th{
+padding:20px;
+font-size:16px;
+font-weight:600;
+border:none;
+}
+
+.table td{
+padding:20px;
+vertical-align:middle;
+border-color:rgba(255,255,255,0.08);
+}
+
+.course-img{
+width:100px;
+height:70px;
+object-fit:cover;
+border-radius:12px;
+}
+
+.action-btn{
+padding:10px 16px;
+border-radius:12px;
+font-weight:600;
+text-decoration:none;
+display:inline-block;
+margin-right:8px;
+transition:0.3s;
+}
+
+.action-btn:hover{
+transform:translateY(-2px);
+}
+
+.edit-btn{
+background:#2563eb;
+color:white;
+}
+
+.delete-btn{
+background:#dc2626;
+color:white;
+}
+
+.price{
+font-size:20px;
+font-weight:700;
+color:#10b981;
+}
+
+body.dark-mode .admin-course-wrapper{
+background:#111827;
+}
+
+</style>
+
+<div class="admin-course-wrapper">
+
+<div class="top-bar">
+
+<div>
+
+<h1 class="page-title">
+📚 Manage Courses
+</h1>
+
+<p class="page-subtitle">
+Add, edit and manage all LMS courses.
+</p>
+
+</div>
+
+<a href="{% url 'add_course' %}"
+class="add-btn">
+
+➕ Add Course
+
+</a>
+
+</div>
+
+<div class="course-table table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>Image</th>
+
+<th>Course</th>
+
+<th>Instructor</th>
+
+<th>Level</th>
+
+<th>Price</th>
+
+<th>Students</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for course in courses %}
+
+<tr>
+
+<td>
+
+{% if course.image %}
+
+<img src="{{ course.image.url }}"
+class="course-img">
+
+{% endif %}
+
+</td>
+
+<td>
+
+<div class="fw-bold">
+{{ course.title }}
+</div>
+
+<small class="text-light">
+{{ course.category }}
+</small>
+
+</td>
+
+<td>
+
+{{ course.instructor }}
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+{{ course.level }}
+
+</span>
+
+</td>
+
+<td>
+
+<div class="price">
+
+₹{{ course.price }}
+
+</div>
+
+</td>
+
+<td>
+
+{{ course.students }}
+
+</td>
+
+<td>
+
+<a href="{% url 'edit_course' course.id %}"
+class="action-btn edit-btn">
+
+✏️ Edit
+
+</a>
+
+<a href="{% url 'delete_course' course.id %}"
+class="action-btn delete-btn">
+
+🗑 Delete
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -2,57 +2,287 @@
 
 {% block content %}
 
-<div class="container mt-5">
+<style>
 
-    <h2 class="fw-bold mb-4 text-center">
-        Student Leaderboard
-    </h2>
+.leaderboard-wrapper{
+background:rgba(17,24,39,0.9);
+border-radius:28px;
+padding:40px;
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
+color:white;
+}
 
-    <div class="table-responsive">
+.leaderboard-title{
+font-size:52px;
+font-weight:700;
+margin-bottom:10px;
+}
 
-        <table class="table table-dark table-hover">
+.leaderboard-subtitle{
+color:#9ca3af;
+margin-bottom:35px;
+}
 
-            <thead>
+.leaderboard-table{
+overflow:hidden;
+border-radius:20px;
+}
 
-                <tr>
+.leaderboard-header{
+background:rgba(79,70,229,0.15);
+padding:20px;
+font-weight:600;
+border:1px solid rgba(255,255,255,0.08);
+}
 
-                    <th>Rank</th>
+.leaderboard-row{
+background:rgba(255,255,255,0.03);
+padding:20px;
+border-bottom:1px solid rgba(255,255,255,0.06);
+transition:0.3s;
+}
 
-                    <th>Student</th>
+.leaderboard-row:hover{
+background:rgba(79,70,229,0.12);
+transform:scale(1.01);
+}
 
-                    <th>Average Percentage</th>
+.rank-badge{
+width:50px;
+height:50px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:20px;
+color:white;
+}
 
-                </tr>
+.gold{
+background:#fbbf24;
+}
 
-            </thead>
+.silver{
+background:#9ca3af;
+}
 
-            <tbody>
+.bronze{
+background:#f97316;
+}
 
-                {% for student in leaderboard_data %}
+.normal{
+background:#374151;
+}
 
-                <tr>
+.student-name{
+font-size:20px;
+font-weight:600;
+}
 
-                    <td>
-                        {{ forloop.counter }}
-                    </td>
+.progress{
+height:10px;
+border-radius:20px;
+background:#1f2937;
+}
 
-                    <td>
-                        {{ student.student__username }}
-                    </td>
+.progress-bar{
+border-radius:20px;
+}
 
-                    <td>
-                        {{ student.average_score|floatformat:2 }}%
-                    </td>
+.stats-card{
+background:rgba(255,255,255,0.05);
+border-radius:22px;
+padding:25px;
+text-align:center;
+transition:0.3s;
+height:100%;
+}
 
-                </tr>
+.stats-card:hover{
+transform:translateY(-5px);
+background:rgba(79,70,229,0.12);
+}
 
-                {% endfor %}
+.stats-number{
+font-size:38px;
+font-weight:700;
+}
 
-            </tbody>
+.stats-label{
+color:#9ca3af;
+}
 
-        </table>
+body.dark-mode .leaderboard-wrapper{
+background:#111827;
+color:white;
+}
 
-    </div>
+body.dark-mode .leaderboard-row{
+background:rgba(255,255,255,0.04);
+}
+
+body.dark-mode .leaderboard-subtitle,
+body.dark-mode .stats-label{
+color:#d1d5db;
+}
+
+</style>
+
+<div class="leaderboard-wrapper">
+
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+
+<div>
+
+<h1 class="leaderboard-title">
+🏆 Student Leaderboard
+</h1>
+
+<p class="leaderboard-subtitle">
+Top performers based on quiz performance.
+</p>
+
+</div>
+
+</div>
+
+<div class="leaderboard-table">
+
+<div class="row leaderboard-header m-0">
+
+<div class="col-md-2">
+Rank
+</div>
+
+<div class="col-md-4">
+Student
+</div>
+
+<div class="col-md-4">
+Performance
+</div>
+
+<div class="col-md-2">
+Quizzes
+</div>
+
+</div>
+
+{% for student in leaderboard_data %}
+
+<div class="row leaderboard-row align-items-center m-0">
+
+<div class="col-md-2">
+
+<div class="rank-badge
+{% if forloop.counter == 1 %}
+gold
+{% elif forloop.counter == 2 %}
+silver
+{% elif forloop.counter == 3 %}
+bronze
+{% else %}
+normal
+{% endif %}
+">
+
+{{ forloop.counter }}
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="student-name">
+{{ student.student__username|upper }}
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<h5 class="fw-bold mb-2">
+{{ student.average_score|floatformat:2 }}%
+</h5>
+
+<div class="progress">
+
+<div class="progress-bar bg-success"
+style="width: {{ student.average_score }}%">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<h5 class="fw-bold">
+{{ student.quizzes_taken }}
+</h5>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<div class="row mt-5 g-4">
+
+<div class="col-md-4">
+
+<div class="stats-card">
+
+<div class="stats-number">
+{{ total_students }}
+</div>
+
+<div class="stats-label">
+Total Students
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="stats-card">
+
+<div class="stats-number">
+{{ top_score }}%
+</div>
+
+<div class="stats-label">
+Top Score
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="stats-card">
+
+<div class="stats-number">
+{{ leaderboard_data|length }}
+</div>
+
+<div class="stats-label">
+Leaderboard Rankings
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 

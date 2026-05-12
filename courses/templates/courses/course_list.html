@@ -75,16 +75,37 @@ Progress: {{ progress }}%
 
 <div class="mt-auto">
 
-<a href="/enroll/{{ course.id }}/" class="btn btn-primary w-100 mb-2">
-Enroll
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+<h3 class="text-success fw-bold mb-0">
+₹{{ course.price }}
+</h3>
+
+<span class="badge bg-warning text-dark px-3 py-2">
+Premium
+</span>
+
+</div>
+
+<div class="d-grid gap-2">
+
+<a href="{% url 'add_to_cart' course.id %}"
+class="btn btn-dark btn-lg rounded-3">
+
+🛒 Add To Cart
+
 </a>
 
-<a href="/course/{{ course.id }}/" class="btn btn-outline-secondary w-100">
+<a href="/course/{{ course.id }}/"
+class="btn btn-outline-primary rounded-3">
+
 View Details
+
 </a>
 
 </div>
 
+</div>
 </div>
 
 </div>
@@ -100,21 +121,75 @@ View Details
 <style>
 
 .course-card{
-transition:0.3s;
-border-radius:10px;
+transition:0.35s;
+border-radius:24px;
 overflow:hidden;
+border:none;
+background:white;
+box-shadow:0 8px 30px rgba(0,0,0,0.08);
 }
 
 .course-card:hover{
-transform:translateY(-6px);
-box-shadow:0 12px 25px rgba(0,0,0,0.15);
+transform:translateY(-10px);
+box-shadow:0 20px 40px rgba(0,0,0,0.18);
 }
 
 .course-img{
-height:220px;
+height:240px;
 object-fit:cover;
+transition:0.4s;
+}
+
+.course-card:hover .course-img{
+transform:scale(1.05);
+}
+
+.card-body{
+padding:25px;
+}
+
+.card-title{
+font-size:28px;
+}
+
+.progress{
+height:10px;
+border-radius:20px;
+overflow:hidden;
+background:#e5e7eb;
+}
+
+.progress-bar{
+border-radius:20px;
+}
+
+.btn-dark{
+background:#111827;
+border:none;
+}
+
+.btn-dark:hover{
+background:#000;
+transform:scale(1.02);
+}
+
+.badge{
+font-size:14px;
+border-radius:10px;
+}
+
+body.dark-mode .course-card{
+background:#1f2937;
+color:white;
+}
+
+body.dark-mode .text-muted{
+color:#d1d5db !important;
+}
+
+body.dark-mode .progress{
+background:#374151;
 }
 
 </style>
-
 {% endblock %}

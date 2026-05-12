@@ -1,104 +1,96 @@
 {% extends "courses/base.html" %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 {% block content %}
 
-<div class="container py-4">
+<div class="container-fluid py-4 dashboard-container">
 
-<!-- HEADER -->
+    <!-- HEADER -->
 
-<div class="d-flex justify-content-between align-items-center mb-5">
+    <div class="dashboard-header mb-5">
 
-    <div>
-
-        <h1 class="fw-bold">
-            Student Dashboard
-        </h1>
-
-        <p class="text-muted">
-            Track your learning progress and achievements.
-        </p>
-
-    </div>
-
-    <a href="/courses/" class="btn btn-primary btn-lg">
-        Browse Courses
-    </a>
-
-</div>
-
-<!-- MAIN STATS -->
-
-<div class="row g-4 mb-5">
-
-    <div class="col-md-4">
-
-        <div class="card border-0 shadow-lg p-4 text-center h-100">
-
-            <h6 class="text-muted mb-3">
-                Enrolled Courses
-            </h6>
-
-            <h1 class="fw-bold text-primary">
-                {{ total_courses }}
+        <div>
+            <h1 class="dashboard-title">
+                Welcome Back 👋
             </h1>
 
+            <p class="dashboard-subtitle">
+                Track your learning progress and performance analytics.
+            </p>
         </div>
+
+        <a href="/courses/" class="browse-btn">
+            Browse Courses
+        </a>
 
     </div>
 
-    <div class="col-md-4">
+    <!-- STATS CARDS -->
 
-        <div class="card border-0 shadow-lg p-4 text-center h-100">
+    <div class="row g-4 mb-5">
 
-            <h6 class="text-muted mb-3">
-                Total Lessons
-            </h6>
+        <div class="col-lg-3 col-md-6">
 
-            <h1 class="fw-bold text-success">
-                {{ total_lessons }}
-            </h1>
+            <div class="modern-card blue-card">
 
-        </div>
+                <div>
+                    <p class="card-label">Enrolled Courses</p>
+                    <h2>{{ total_courses }}</h2>
+                </div>
 
-    </div>
+                <div class="card-icon">
+                    📚
+                </div>
 
-    <div class="col-md-4">
-
-        <div class="card border-0 shadow-lg p-4 text-center h-100">
-
-            <h6 class="text-muted mb-3">
-                Completed Lessons
-            </h6>
-
-            <h1 class="fw-bold text-danger">
-                {{ completed_lessons }}
-            </h1>
+            </div>
 
         </div>
 
-    </div>
+        <div class="col-lg-3 col-md-6">
 
-</div>
+            <div class="modern-card green-card">
 
-<!-- QUIZ ANALYTICS -->
+                <div>
+                    <p class="card-label">Total Lessons</p>
+                    <h2>{{ total_lessons }}</h2>
+                </div>
 
-<div class="row mt-4 mb-5">
+                <div class="card-icon">
+                    🎥
+                </div>
 
-    <div class="col-md-3 mb-4">
+            </div>
 
-        <div class="card shadow border-0 text-center h-100">
+        </div>
 
-            <div class="card-body">
+        <div class="col-lg-3 col-md-6">
 
-                <h5 class="fw-bold">
-                    Quiz Attempts
-                </h5>
+            <div class="modern-card red-card">
 
-                <h2 class="text-primary">
-                    {{ total_attempts }}
-                </h2>
+                <div>
+                    <p class="card-label">Completed Lessons</p>
+                    <h2>{{ completed_lessons }}</h2>
+                </div>
+
+                <div class="card-icon">
+                    ✅
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="modern-card purple-card">
+
+                <div>
+                    <p class="card-label">Quiz Attempts</p>
+                    <h2>{{ total_attempts }}</h2>
+                </div>
+
+                <div class="card-icon">
+                    📝
+                </div>
 
             </div>
 
@@ -106,19 +98,81 @@
 
     </div>
 
-    <div class="col-md-3 mb-4">
+    <!-- ANALYTICS -->
 
-        <div class="card shadow border-0 text-center h-100">
+    <div class="row g-4 mb-5">
 
-            <div class="card-body">
+        <div class="col-lg-8">
 
-                <h5 class="fw-bold">
-                    Average Score
-                </h5>
+            <div class="glass-card">
 
-                <h2 class="text-success">
-                    {{ average_score }}%
-                </h2>
+                <div class="section-header">
+
+                    <h4>Learning Analytics</h4>
+
+                </div>
+
+                <canvas id="progressChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="glass-card h-100">
+
+                <div class="section-header">
+                    <h4>Performance Summary</h4>
+                </div>
+
+                <div class="performance-item">
+
+                    <span>Average Score</span>
+
+                    <strong>{{ average_score }}%</strong>
+
+                </div>
+
+                <div class="progress mb-4">
+
+                    <div class="progress-bar bg-success"
+                         style="width: {{ average_score }}%">
+                    </div>
+
+                </div>
+
+                <div class="performance-item">
+
+                    <span>Pass Percentage</span>
+
+                    <strong>{{ pass_percentage }}%</strong>
+
+                </div>
+
+                <div class="progress mb-4">
+
+                    <div class="progress-bar bg-warning"
+                         style="width: {{ pass_percentage }}%">
+                    </div>
+
+                </div>
+
+                <div class="performance-item">
+
+                    <span>Latest Quiz Score</span>
+
+                    <strong>
+
+                        {% if latest_attempt %}
+                            {{ latest_attempt.percentage }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+
+                    </strong>
+
+                </div>
 
             </div>
 
@@ -126,180 +180,366 @@
 
     </div>
 
-    <div class="col-md-3 mb-4">
+    <!-- QUIZ CHART -->
 
-        <div class="card shadow border-0 text-center h-100">
+    <div class="glass-card mb-5">
 
-            <div class="card-body">
+        <div class="section-header">
 
-                <h5 class="fw-bold">
-                    Pass Percentage
-                </h5>
-
-                <h2 class="text-warning">
-                    {{ pass_percentage }}%
-                </h2>
-
-            </div>
+            <h4>Quiz Performance Analytics</h4>
 
         </div>
-
-    </div>
-
-    <div class="col-md-3 mb-4">
-
-        <div class="card shadow border-0 text-center h-100">
-
-            <div class="card-body">
-
-                <h5 class="fw-bold">
-                    Latest Score
-                </h5>
-
-                <h2 class="text-danger">
-
-                    {% if latest_attempt %}
-
-                        {{ latest_attempt.percentage }}%
-
-                    {% else %}
-
-                        0%
-
-                    {% endif %}
-
-                </h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- CHARTS SECTION -->
-
-<div class="row g-4 mb-5">
-
-    <div class="col-lg-8">
-
-        <div class="card border-0 shadow-lg p-4">
-
-            <h4 class="fw-bold mb-4">
-                Learning Progress
-            </h4>
-
-            <canvas id="progressChart"></canvas>
-
-        </div>
-
-    </div>
-
-    <div class="col-lg-4">
-
-        <div class="card border-0 shadow-lg p-4 h-100">
-
-            <h4 class="fw-bold mb-4">
-                Achievements
-            </h4>
-
-            <div class="mb-4">
-
-                <h6 class="fw-bold">
-                    🏆 Course Explorer
-                </h6>
-
-                <p class="text-muted small">
-                    Enrolled in multiple courses.
-                </p>
-
-            </div>
-
-            <div class="mb-4">
-
-                <h6 class="fw-bold">
-                    🔥 Fast Learner
-                </h6>
-
-                <p class="text-muted small">
-                    Completed lessons successfully.
-                </p>
-
-            </div>
-
-            <div>
-
-                <h6 class="fw-bold">
-                    🎯 Goal Achiever
-                </h6>
-
-                <p class="text-muted small">
-                    Consistent learning progress.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- QUIZ ANALYTICS CHART -->
-
-<div class="card shadow border-0 mt-5 mb-5">
-
-    <div class="card-body">
-
-        <h4 class="fw-bold mb-4 text-center">
-            Quiz Performance Analytics
-        </h4>
 
         <canvas id="quizChart"></canvas>
 
     </div>
 
-</div>
+    <!-- ACHIEVEMENTS -->
 
-<!-- QUICK ACTIONS -->
+    <div class="glass-card mb-5">
 
-<div class="card border-0 shadow-lg p-4">
+        <div class="section-header">
 
-    <h4 class="fw-bold mb-4">
-        Quick Actions
-    </h4>
+            <h4>Achievements</h4>
 
-    <div class="d-flex flex-wrap gap-3">
+        </div>
 
-        <a href="/courses/" class="btn btn-primary">
-            Explore Courses
-        </a>
+        <div class="row g-4">
 
-        <a href="/my-courses/" class="btn btn-success">
-            My Learning
-        </a>
+            <div class="col-md-4">
 
-        <a href="/dashboard/" class="btn btn-dark">
-            Refresh Dashboard
-        </a>
+                <div class="achievement-box">
+
+                    <h5>🏆 Course Explorer</h5>
+
+                    <p>
+                        Enrolled in multiple learning programs.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="achievement-box">
+
+                    <h5>🔥 Fast Learner</h5>
+
+                    <p>
+                        Completed lessons consistently.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="achievement-box">
+
+                    <h5>🎯 Goal Achiever</h5>
+
+                    <p>
+                        Maintaining strong quiz performance.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RECOMMENDED COURSES -->
+
+    <div class="glass-card mb-5">
+
+        <div class="section-header">
+
+            <h4>
+                Recommended For You 🎯
+            </h4>
+
+            <p class="text-muted">
+                Personalized recommendations based on your quiz performance.
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            {% for course in recommended_courses %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="recommend-card">
+
+                    {% if course.image %}
+
+                    <img src="{{ course.image.url }}"
+                         class="recommend-img">
+
+                    {% endif %}
+
+                    <div class="recommend-content">
+
+                        <span class="recommend-level">
+                            {{ course.level }}
+                        </span>
+
+                        <h5 class="mt-3 fw-bold">
+                            {{ course.title }}
+                        </h5>
+
+                        <p class="text-muted">
+
+                            {{ course.description|truncatewords:15 }}
+
+                        </p>
+
+                        <a href="/course/{{ course.id }}/"
+                           class="btn btn-dark w-100">
+
+                            View Course
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="glass-card">
+
+        <div class="section-header">
+
+            <h4>Quick Actions</h4>
+
+        </div>
+
+        <div class="d-flex flex-wrap gap-3">
+
+            <a href="/courses/" class="action-btn primary-btn">
+                Explore Courses
+            </a>
+
+            <a href="/my-courses/" class="action-btn success-btn">
+                My Learning
+            </a>
+
+            <a href="/dashboard/" class="action-btn dark-btn">
+                Refresh Dashboard
+            </a>
+
+        </div>
 
     </div>
 
 </div>
 
-</div>
+<style>
 
+body{
+    background:#f4f7fb;
+}
 
-<!-- CHART JS -->
+.dashboard-container{
+    padding-left:25px;
+    padding-right:25px;
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.dashboard-title{
+    font-size:40px;
+    font-weight:700;
+    color:#111827;
+}
+
+.dashboard-subtitle{
+    color:#6b7280;
+    font-size:16px;
+}
+
+.browse-btn{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    padding:14px 28px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.browse-btn:hover{
+    transform:translateY(-3px);
+    color:white;
+}
+
+.modern-card{
+    border-radius:20px;
+    padding:28px;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    min-height:150px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.modern-card:hover{
+    transform:translateY(-6px);
+}
+
+.blue-card{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+.green-card{
+    background:linear-gradient(135deg,#059669,#10b981);
+}
+
+.red-card{
+    background:linear-gradient(135deg,#dc2626,#ef4444);
+}
+
+.purple-card{
+    background:linear-gradient(135deg,#7c3aed,#8b5cf6);
+}
+
+.card-label{
+    font-size:15px;
+    opacity:0.9;
+}
+
+.card-icon{
+    font-size:42px;
+}
+
+.glass-card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+.section-header{
+    margin-bottom:25px;
+}
+
+.section-header h4{
+    font-weight:700;
+    color:#111827;
+}
+
+.performance-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+    font-size:16px;
+}
+
+.achievement-box{
+    background:#f9fafb;
+    padding:25px;
+    border-radius:16px;
+    transition:0.3s;
+}
+
+.achievement-box:hover{
+    transform:translateY(-5px);
+}
+
+.action-btn{
+    padding:12px 24px;
+    border-radius:12px;
+    text-decoration:none;
+    color:white;
+    font-weight:600;
+}
+
+.primary-btn{
+    background:#2563eb;
+}
+
+.success-btn{
+    background:#059669;
+}
+
+.dark-btn{
+    background:#111827;
+}
+
+canvas{
+    max-height:320px;
+}
+
+.recommend-card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    transition:0.35s;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    height:100%;
+}
+
+.recommend-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 18px 40px rgba(0,0,0,0.15);
+}
+
+.recommend-img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.recommend-content{
+    padding:22px;
+}
+
+.recommend-level{
+    background:#eef2ff;
+    color:#4f46e5;
+    padding:6px 14px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.recommend-content h5{
+    color:#111827;
+}
+
+.recommend-content p{
+    min-height:60px;
+}
+
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
-
-    // LEARNING PROGRESS CHART
 
     const progressCtx = document.getElementById('progressChart');
 
@@ -310,104 +550,57 @@ document.addEventListener("DOMContentLoaded", function () {
         data: {
 
             labels: [
-
                 'Courses',
-
                 'Lessons',
-
                 'Completed'
-
             ],
 
             datasets: [{
-
-                label: 'Learning Analytics',
-
+                label: 'Learning Progress',
                 data: [
-
                     {{ total_courses }},
-
                     {{ total_lessons }},
-
                     {{ completed_lessons }}
-
                 ],
-
-                borderWidth: 1
-
+                borderRadius: 10,
+                borderWidth: 0
             }]
-
         },
 
         options: {
-
             responsive: true,
-
             plugins: {
-
                 legend: {
-
-                    display: true
+                    display: false
                 }
-
             }
-
         }
-
     });
-
-    // QUIZ ANALYTICS CHART
 
     const quizCtx = document.getElementById('quizChart');
 
     new Chart(quizCtx, {
 
-        type: 'bar',
+        type: 'doughnut',
 
         data: {
 
             labels: [
-
                 'Average Score',
-
                 'Pass Percentage'
-
             ],
 
             datasets: [{
-
-                label: 'Quiz Analytics',
-
                 data: [
-
                     {{ average_score }},
-
                     {{ pass_percentage }}
-
                 ],
-
-                borderWidth: 1
-
+                borderWidth: 0
             }]
-
         },
 
         options: {
-
-            responsive: true,
-
-            scales: {
-
-                y: {
-
-                    beginAtZero: true,
-
-                    max: 100
-
-                }
-
-            }
-
+            responsive: true
         }
 
     });

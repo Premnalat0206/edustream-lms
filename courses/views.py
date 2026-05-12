@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -6,11 +7,27 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 import datetime
+from django.utils.crypto import get_random_string
 from .assignment_views import *
 from .models import Course, Lesson, Enrollment, QuizQuestion, LessonProgress, UserActivity,QuizAttempt
 from .quiz_views import *
-from django.db.models import Avg
-
+from django.db.models import Avg,Count
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from axes.helpers import get_client_username
+from axes.models import AccessAttempt
+from .models import *
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import landscape
+from reportlab.lib.utils import ImageReader
+import datetime
+from django.contrib.auth.models import User
+from .models import Cart, Payment
+from django.contrib import messages
+import uuid
+from .forms import CourseForm
 
 # COURSE LIST + SEARCH
 @login_required
@@ -62,9 +79,15 @@ def enroll_course(request, course_id):
 # COURSE DETAIL + PROGRESS
 @login_required
 def course_detail(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
 
-    lessons = Lesson.objects.filter(course=course)
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
+
+    lessons = Lesson.objects.filter(
+        course=course
+    )
 
     total_lessons = lessons.count()
 
@@ -74,18 +97,34 @@ def course_detail(request, course_id):
     ).count()
 
     progress = 0
+
     if total_lessons > 0:
-        progress = int((completed / total_lessons) * 100)
+
+        progress = int(
+            (completed / total_lessons) * 100
+        )
+
+    # CHECK QUIZ PASSING
+
+    quiz_passed = QuizAttempt.objects.filter(
+        student=request.user,
+        course=course,
+        passed=True
+    ).exists()
 
     return render(request, "courses/course_detail.html", {
+
         "course": course,
+
         "lessons": lessons,
-        "progress": progress
+
+        "progress": progress,
+
+        "quiz_passed": quiz_passed
     })
 
-
 # LESSON PLAYER PAGE (UDemy STYLE)
-@login_required
+
 @login_required
 def lesson_detail(request, lesson_id):
 
@@ -143,69 +182,100 @@ def my_courses(request):
 
 
 # QUIZ VIEW
-# QUIZ VIEW
 @login_required
 def quiz_view(request, course_id):
 
-    course = get_object_or_404(Course, id=course_id)
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
 
-    questions = QuizQuestion.objects.filter(course=course)
+    questions = QuizQuestion.objects.filter(
+        course=course
+    )
 
-    # ATTEMPT RESTRICTION
+    # MAX QUIZ ATTEMPTS
+
+    MAX_ATTEMPTS = 3
+
     attempt_count = QuizAttempt.objects.filter(
         student=request.user,
         course=course
     ).count()
 
-    MAX_ATTEMPTS = 3
-
     if attempt_count >= MAX_ATTEMPTS:
 
-      return render(request, "courses/quiz_attempt_limit.html", {
-
-        "course": course,
-
-        "max_attempts": MAX_ATTEMPTS
-
-    })
+        return render(
+            request,
+            "courses/quiz_attempt_limit.html",
+            {
+                "course": course,
+                "max_attempts": MAX_ATTEMPTS
+            }
+        )
 
     # LESSON COMPLETION CHECK
-    lessons = Lesson.objects.filter(course=course)
+
+    lessons = Lesson.objects.filter(
+        course=course
+    )
 
     total_lessons = lessons.count()
 
-    completed = LessonProgress.objects.filter(
+    completed_lessons = LessonProgress.objects.filter(
         student=request.user,
         lesson__course=course,
         completed=True
     ).count()
 
-    if completed < total_lessons:
+    if completed_lessons < total_lessons:
 
         return HttpResponse(
             "Complete all lessons before attempting the quiz."
         )
 
+    # CHECK QUIZ QUESTIONS
+
+    total_questions = questions.count()
+
+    if total_questions == 0:
+
+        return HttpResponse(
+            "No quiz questions available for this course."
+        )
+
     # QUIZ SUBMISSION
+
     if request.method == "POST":
 
         score = 0
 
         for q in questions:
 
-            answer = request.POST.get(f"question_{q.id}")
+            selected_answer = request.POST.get(
+                f"question_{q.id}"
+            )
 
-            if answer and int(answer) == q.correct_option:
+            if (
+                selected_answer and
+                int(selected_answer) == q.correct_option
+            ):
 
                 score += 1
 
-        total_questions = questions.count()
+        # CALCULATE PERCENTAGE
 
-        percentage = (score / total_questions) * 100
+        percentage = round(
+            (score / total_questions) * 100,
+            2
+        )
+
+        # PASSING CRITERIA
 
         passed = percentage >= 40
 
-        # STORE QUIZ ATTEMPT
+        # SAVE QUIZ ATTEMPT
+
         QuizAttempt.objects.create(
 
             student=request.user,
@@ -221,24 +291,37 @@ def quiz_view(request, course_id):
             passed=passed
         )
 
-        return render(request, "courses/quiz_result.html", {
+        # RESULT PAGE
 
-            "score": score,
+        return render(
+            request,
+            "courses/quiz_result.html",
+            {
 
-            "total": total_questions,
+                "course": course,
 
-            "percentage": percentage,
+                "score": score,
 
-            "passed": passed
-        })
+                "total": total_questions,
 
-    return render(request, "courses/quiz.html", {
+                "percentage": percentage,
 
-        "questions": questions,
+                "passed": passed
+            }
+        )
 
-        "course": course
-    })
+    # QUIZ PAGE
 
+    return render(
+        request,
+        "courses/quiz.html",
+        {
+
+            "questions": questions,
+
+            "course": course
+        }
+    )
 @login_required
 def quiz_history(request):
 
@@ -259,24 +342,43 @@ def leaderboard(request):
     leaderboard_data = QuizAttempt.objects.values(
         'student__username'
     ).annotate(
-        average_score=Avg('percentage')
+        average_score=Avg('percentage'),
+        quizzes_taken=Count('id')
     ).order_by('-average_score')[:10]
+
+    total_students = leaderboard_data.count()
+
+    top_score = 0
+
+    if leaderboard_data:
+        top_score = leaderboard_data[0]['average_score']
 
     return render(
         request,
         'courses/leaderboard.html',
         {
-            'leaderboard_data': leaderboard_data
+            'leaderboard_data': leaderboard_data,
+            'total_students': total_students,
+            'top_score': round(top_score, 2)
         }
     )
-# GENERATE CERTIFICATE
+
 @login_required
 def generate_certificate(request, course_id):
 
-    course = get_object_or_404(Course, id=course_id)
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
+
     user = request.user
 
-    lessons = Lesson.objects.filter(course=course)
+    # LESSON CHECK
+
+    lessons = Lesson.objects.filter(
+        course=course
+    )
+
     total_lessons = lessons.count()
 
     completed = LessonProgress.objects.filter(
@@ -284,66 +386,46 @@ def generate_certificate(request, course_id):
         lesson__course=course
     ).count()
 
-    if completed < total_lessons:
-        return redirect("course_detail", course_id=course.id)
+    if total_lessons == 0 or completed < total_lessons:
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+        return redirect(
+            "course_detail",
+            course_id=course.id
+        )
 
-    p = canvas.Canvas(response)
+    # QUIZ PASS CHECK
 
-    # PAGE SIZE
-    width = 800
-    height = 600
+    quiz_attempt = QuizAttempt.objects.filter(
+        student=user,
+        course=course,
+        passed=True
+    ).first()
 
-    # BORDER
-    p.setLineWidth(6)
-    p.rect(30, 30, 740, 540)
+    if not quiz_attempt:
 
-    p.setLineWidth(2)
-    p.rect(50, 50, 700, 500)
+        return redirect(
+            "quiz",
+            course_id=course.id
+        )
 
-    # TITLE
-    p.setFont("Helvetica-Bold", 40)
-    p.drawCentredString(400, 500, "CERTIFICATE")
+    full_name = user.get_full_name()
 
-    p.setFont("Helvetica", 25)
-    p.drawCentredString(400, 460, "OF COMPLETION")
+    if not full_name:
+        full_name = user.username
 
-    # BODY TEXT
-    p.setFont("Helvetica", 16)
-    p.drawCentredString(400, 400, "This certificate is proudly presented to")
+    completion_date = datetime.date.today().strftime(
+        "%d %B %Y"
+    )
 
-    # STUDENT NAME
-    p.setFont("Helvetica-Bold", 28)
-    p.drawCentredString(400, 360, user.username)
-
-    p.setFont("Helvetica", 16)
-    p.drawCentredString(400, 320, "for successfully completing the course")
-
-    # COURSE NAME
-    p.setFont("Helvetica-Bold", 22)
-    p.drawCentredString(400, 290, course.title)
-
-    # DATE
-    date = datetime.date.today()
-
-    p.setFont("Helvetica", 14)
-    p.drawCentredString(400, 240, f"Date: {date}")
-
-    # SIGNATURE
-    p.line(300, 180, 500, 180)
-    p.setFont("Helvetica", 12)
-    p.drawCentredString(400, 160, "Instructor Signature")
-
-    # FOOTER
-    p.setFont("Helvetica-Oblique", 12)
-    p.drawCentredString(400, 120, "EduStream Learning Platform")
-
-    p.showPage()
-    p.save()
-
-    return response
+    return render(
+        request,
+        "courses/certificate.html",
+        {
+            "course": course,
+            "full_name": full_name,
+            "completion_date": completion_date
+        }
+    )
 
 # DASHBOARD
 @login_required
@@ -395,6 +477,28 @@ def dashboard(request):
             2
         )
 
+    # RECOMMENDATION ENGINE
+
+    recommended_courses = Course.objects.none()
+
+    if average_score < 40:
+
+        recommended_courses = Course.objects.filter(
+            level='Beginner'
+        )[:3]
+
+    elif average_score < 70:
+
+        recommended_courses = Course.objects.filter(
+            level='Intermediate'
+        )[:3]
+
+    else:
+
+        recommended_courses = Course.objects.filter(
+            level='Advanced'
+        )[:3]
+
     return render(request, "courses/dashboard.html", {
 
         "total_courses": total_courses,
@@ -409,25 +513,61 @@ def dashboard(request):
 
         "pass_percentage": pass_percentage,
 
-        "latest_attempt": latest_attempt
+        "latest_attempt": latest_attempt,
+
+        "recommended_courses": recommended_courses
     })
+
 def register(request):
 
     if request.user.is_authenticated:
         return redirect("dashboard")
 
+    error = None
+
     if request.method == "POST":
 
-        form = UserCreationForm(request.POST)
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        username = request.POST.get("username")
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
 
-        if form.is_valid():
-            form.save()
+        # REQUIRED VALIDATION
+
+        if not first_name or not last_name:
+
+            error = "First name and last name are required."
+
+        elif password1 != password2:
+
+            error = "Passwords do not match."
+
+        elif User.objects.filter(username=username).exists():
+
+            error = "Username already exists."
+
+        else:
+
+            user = User.objects.create_user(
+
+                username=username,
+
+                password=password1,
+
+                first_name=first_name,
+
+                last_name=last_name
+            )
+
+            user.save()
+
             return redirect("login")
 
-    else:
-        form = UserCreationForm()
+    return render(request, "courses/register.html", {
 
-    return render(request, "courses/register.html", {"form": form})
+        "error": error
+    })
 
 def login_view(request):
 
@@ -439,9 +579,25 @@ def login_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
+        # CHECK LOCKOUT
+
+        attempts = AccessAttempt.objects.filter(username=username)
+
+        if attempts.exists():
+            attempt = attempts.first()
+
+            if attempt.failures_since_start >= 5:
+                messages.error(
+                    request,
+                    "Too many failed login attempts. Please try again later."
+                )
+
+                return render(request, "courses/login.html")
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+
             login(request, user)
 
             next_url = request.GET.get("next")
@@ -451,13 +607,14 @@ def login_view(request):
 
             if user.is_staff:
                 return redirect("admin_dashboard")
-            else:
-                return redirect("dashboard")
+
+            return redirect("dashboard")
 
         else:
-            return render(request, "courses/login.html", {
-                "error": "Invalid username or password"
-            })
+
+            messages.error(request, "Invalid username or password")
+
+            return render(request, "courses/login.html")
 
     return render(request, "courses/login.html")
 
@@ -488,3 +645,301 @@ def home(request):
         "courses": courses
     })
 
+@login_required
+def add_to_cart(request, course_id):
+
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
+
+    # CHECK ALREADY PURCHASED
+
+    already_enrolled = Enrollment.objects.filter(
+        student=request.user,
+        course=course
+    ).exists()
+
+    if already_enrolled:
+
+        messages.warning(
+            request,
+            "You already purchased this course."
+        )
+
+        return redirect('course_list')
+
+    # CHECK ALREADY IN CART
+
+    already_in_cart = Cart.objects.filter(
+        user=request.user,
+        course=course
+    ).exists()
+
+    if already_in_cart:
+
+        messages.info(
+            request,
+            "Course already exists in cart."
+        )
+
+        return redirect('cart')
+
+    # ADD COURSE TO CART
+
+    Cart.objects.create(
+        user=request.user,
+        course=course
+    )
+
+    messages.success(
+        request,
+        "Course added to cart successfully."
+    )
+
+    return redirect('cart')
+
+
+@login_required
+def cart_view(request):
+
+    cart_items = Cart.objects.filter(
+        user=request.user
+    )
+
+    total_price = sum(
+        item.course.price
+        for item in cart_items
+    )
+
+    gst = round(total_price * 0.18)
+
+    final_total = total_price + gst
+
+    return render(
+        request,
+        'courses/cart.html',
+        {
+            'cart_items': cart_items,
+            'total_price': total_price,
+            'gst': gst,
+            'final_total': final_total
+        }
+    )
+
+@login_required
+def checkout(request):
+
+    cart_items = Cart.objects.filter(
+        user=request.user
+    )
+
+    if not cart_items.exists():
+
+        messages.warning(
+            request,
+            "Your cart is empty."
+        )
+
+        return redirect('cart')
+
+    total_price = sum(
+        item.course.price
+        for item in cart_items
+    )
+
+    gst = round(total_price * 0.18)
+
+    final_total = total_price + gst
+
+    if request.method == "POST":
+
+        payment_method = request.POST.get(
+            'payment_method'
+        )
+
+        for item in cart_items:
+
+            Payment.objects.create(
+
+                user=request.user,
+
+                course=item.course,
+
+                amount=item.course.price,
+
+                payment_method=payment_method,
+
+                status='Completed',
+
+                transaction_id=get_random_string(12)
+            )
+
+            # AUTO ENROLL
+
+            Enrollment.objects.get_or_create(
+
+                student=request.user,
+
+                course=item.course
+            )
+
+        # CLEAR CART
+
+        cart_items.delete()
+
+        messages.success(
+            request,
+            "Payment successful. Course unlocked."
+        )
+
+        return redirect('my_courses')
+
+    return render(
+        request,
+        'courses/checkout.html',
+        {
+            'cart_items': cart_items,
+            'total_price': total_price,
+            'gst': gst,
+            'final_total': final_total
+        }
+    )
+
+
+@login_required
+def remove_from_cart(request, cart_id):
+
+    cart_item = get_object_or_404(
+        Cart,
+        id=cart_id,
+        user=request.user
+    )
+
+    cart_item.delete()
+
+    messages.success(
+        request,
+        "Course removed from cart."
+    )
+
+    return redirect('cart')
+
+@login_required
+def admin_courses(request):
+
+    if not request.user.is_staff:
+
+        return redirect('dashboard')
+
+    courses = Course.objects.all()
+
+    return render(
+        request,
+        'courses/admin_courses.html',
+        {
+            'courses': courses
+        }
+    )
+
+@login_required
+def add_course(request):
+
+    if not request.user.is_staff:
+
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+
+        form = CourseForm(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Course added successfully."
+            )
+
+            return redirect('admin_courses')
+
+    else:
+
+        form = CourseForm()
+
+    return render(
+        request,
+        'courses/add_course.html',
+        {
+            'form': form
+        }
+    )
+
+@login_required
+def edit_course(request, course_id):
+
+    if not request.user.is_staff:
+
+        return redirect('dashboard')
+
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
+
+    if request.method == 'POST':
+
+        form = CourseForm(
+            request.POST,
+            request.FILES,
+            instance=course
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Course updated successfully."
+            )
+
+            return redirect('admin_courses')
+
+    else:
+
+        form = CourseForm(instance=course)
+
+    return render(
+        request,
+        'courses/edit_course.html',
+        {
+            'form': form,
+            'course': course
+        }
+    )
+
+@login_required
+def delete_course(request, course_id):
+
+    if not request.user.is_staff:
+
+        return redirect('dashboard')
+
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
+
+    course.delete()
+
+    messages.success(
+        request,
+        "Course deleted successfully."
+    )
+
+    return redirect('admin_courses')

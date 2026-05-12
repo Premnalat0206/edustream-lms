@@ -1,0 +1,274 @@
+{% extends 'courses/base.html' %}
+
+{% block content %}
+
+<style>
+
+.admin-wrapper{
+background:rgba(17,24,39,0.95);
+border-radius:30px;
+padding:40px;
+color:white;
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
+}
+
+.admin-title{
+font-size:52px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.admin-subtitle{
+color:#9ca3af;
+margin-bottom:40px;
+}
+
+.stat-card{
+background:rgba(255,255,255,0.05);
+border-radius:24px;
+padding:30px;
+transition:0.3s;
+height:100%;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.stat-card:hover{
+transform:translateY(-6px);
+background:rgba(79,70,229,0.15);
+}
+
+.stat-icon{
+font-size:42px;
+margin-bottom:15px;
+}
+
+.stat-number{
+font-size:42px;
+font-weight:700;
+}
+
+.stat-label{
+font-size:18px;
+color:#d1d5db;
+}
+
+.activity-card{
+background:rgba(255,255,255,0.05);
+border-radius:24px;
+padding:30px;
+margin-top:40px;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.activity-title{
+font-size:30px;
+font-weight:700;
+margin-bottom:25px;
+}
+
+.activity-item{
+padding:18px;
+border-radius:16px;
+margin-bottom:15px;
+background:rgba(255,255,255,0.04);
+transition:0.3s;
+}
+
+.activity-item:hover{
+background:rgba(79,70,229,0.12);
+}
+
+.activity-user{
+font-weight:700;
+font-size:18px;
+}
+
+.activity-time{
+color:#9ca3af;
+font-size:14px;
+}
+
+.quick-actions{
+margin-top:40px;
+}
+
+.action-btn{
+padding:16px;
+border-radius:18px;
+font-weight:600;
+font-size:18px;
+transition:0.3s;
+}
+
+.action-btn:hover{
+transform:translateY(-3px);
+}
+
+body.dark-mode .admin-wrapper{
+background:#111827;
+}
+
+</style>
+
+<div class="admin-wrapper">
+
+<h1 class="admin-title">
+🛠️ Admin Dashboard
+</h1>
+
+<p class="admin-subtitle">
+Manage students, courses, enrollments and platform analytics.
+</p>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="stat-card">
+
+<div class="stat-icon">
+👨‍🎓
+</div>
+
+<div class="stat-number">
+{{ total_users }}
+</div>
+
+<div class="stat-label">
+Total Students
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="stat-card">
+
+<div class="stat-icon">
+📚
+</div>
+
+<div class="stat-number">
+{{ total_courses }}
+</div>
+
+<div class="stat-label">
+Total Courses
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="stat-card">
+
+<div class="stat-icon">
+📝
+</div>
+
+<div class="stat-number">
+{{ total_enrollments }}
+</div>
+
+<div class="stat-label">
+Total Enrollments
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="quick-actions">
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<a href="/admin/courses/course/add/"
+class="btn btn-primary w-100 action-btn">
+
+➕ Add New Course
+
+</a>
+
+</div>
+
+<div class="col-lg-4">
+
+<a href="/upload-quiz-csv/"
+class="btn btn-success w-100 action-btn">
+
+📤 Upload Quiz CSV
+
+</a>
+
+</div>
+
+<div class="col-lg-4">
+
+<a href="/admin/"
+class="btn btn-warning w-100 action-btn">
+
+⚙️ Open Admin Panel
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="activity-card">
+
+<h2 class="activity-title">
+📈 Recent Activities
+</h2>
+
+{% for activity in activities %}
+
+<div class="activity-item">
+
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+
+<div>
+
+<div class="activity-user">
+{{ activity.user.username }}
+</div>
+
+<div>
+{{ activity.action }}
+</div>
+
+</div>
+
+<div class="activity-time">
+{{ activity.timestamp }}
+</div>
+
+</div>
+
+</div>
+
+{% empty %}
+
+<div class="alert alert-info">
+
+No recent activities found.
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Certificate</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#f3f4f6;
+font-family:'Poppins',sans-serif;
+}
+
+.certificate-container{
+width:1100px;
+height:750px;
+margin:30px auto;
+background:white;
+position:relative;
+border:15px solid #0b1c48;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+overflow:hidden;
+}
+
+.inner-border{
+position:absolute;
+top:20px;
+left:20px;
+right:20px;
+bottom:20px;
+border:3px solid #c89b3c;
+}
+
+.content{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:90%;
+text-align:center;
+}
+
+.title{
+font-size:70px;
+font-weight:700;
+color:#0b1c48;
+letter-spacing:4px;
+margin-bottom:10px;
+}
+
+.subtitle{
+font-size:28px;
+color:#c89b3c;
+margin-bottom:40px;
+}
+
+.presented{
+font-size:22px;
+letter-spacing:3px;
+margin-bottom:20px;
+}
+
+.student-name{
+font-size:55px;
+font-weight:700;
+color:#c89b3c;
+margin-bottom:40px;
+text-transform:uppercase;
+}
+
+.course-text{
+font-size:22px;
+margin-bottom:20px;
+}
+
+.course-name{
+font-size:42px;
+font-weight:700;
+color:#0b1c48;
+margin-bottom:50px;
+}
+
+.date{
+font-size:20px;
+margin-bottom:80px;
+}
+
+.signature-section{
+display:flex;
+justify-content:space-between;
+margin-top:60px;
+padding:0 100px;
+}
+
+.signature{
+text-align:center;
+}
+
+.signature-line{
+width:220px;
+border-top:2px solid #000;
+margin-bottom:10px;
+}
+
+.signature-name{
+font-size:22px;
+font-weight:600;
+}
+
+.signature-role{
+font-size:18px;
+color:#555;
+}
+
+.print-btn{
+display:block;
+margin:20px auto;
+padding:12px 30px;
+background:#0b1c48;
+color:white;
+border:none;
+font-size:18px;
+cursor:pointer;
+border-radius:8px;
+}
+
+@media print{
+
+.print-btn{
+display:none;
+}
+
+body{
+background:white;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<button onclick="window.print()" class="print-btn">
+Download Certificate
+</button>
+
+<div class="certificate-container">
+
+<div class="inner-border"></div>
+
+<div class="content">
+
+<div class="title">
+CERTIFICATE
+</div>
+
+<div class="subtitle">
+OF COMPLETION
+</div>
+
+<div class="presented">
+THIS CERTIFICATE IS PROUDLY PRESENTED TO
+</div>
+
+<div class="student-name">
+{{ full_name }}
+</div>
+
+<div class="course-text">
+FOR SUCCESSFULLY COMPLETING THE COURSE
+</div>
+
+<div class="course-name">
+{{ course.title }}
+</div>
+
+<div class="date">
+Date of Completion: {{ completion_date }}
+</div>
+
+<div class="signature-section">
+
+<div class="signature">
+
+<div class="signature-line"></div>
+
+<div class="signature-name">
+Rohit Sharma
+</div>
+
+<div class="signature-role">
+Instructor
+</div>
+
+</div>
+
+<div class="signature">
+
+<div class="signature-line"></div>
+
+<div class="signature-name">
+Ananya Verma
+</div>
+
+<div class="signature-role">
+Director
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

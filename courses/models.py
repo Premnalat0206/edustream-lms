@@ -1,7 +1,49 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+import os
+
+
+# FILE SIZE VALIDATOR
+
+def validate_file_size(file):
+
+    max_size = 5 * 1024 * 1024
+
+    if file.size > max_size:
+        raise ValidationError(
+            "File size must be under 5MB."
+        )
+
+
+# IMAGE VALIDATOR
+
+def validate_image_extension(file):
+
+    ext = os.path.splitext(file.name)[1]
+
+    valid_extensions = ['.jpg', '.jpeg', '.png']
+
+    if ext.lower() not in valid_extensions:
+        raise ValidationError(
+            "Only JPG, JPEG, and PNG images are allowed."
+        )
+
+
+# DOCUMENT VALIDATOR
+
+def validate_document_extension(file):
+
+    ext = os.path.splitext(file.name)[1]
+
+    valid_extensions = ['.pdf', '.doc', '.docx']
+
+    if ext.lower() not in valid_extensions:
+        raise ValidationError(
+            "Only PDF, DOC, and DOCX files are allowed."
+        )
+
 
 class Category(models.Model):
 
@@ -25,7 +67,11 @@ class Instructor(models.Model):
     bio = models.TextField()
 
     image = models.ImageField(
-        upload_to='instructors/'
+        upload_to='instructors/',
+        validators=[
+            validate_file_size,
+            validate_image_extension
+        ]
     )
 
     def __str__(self):
@@ -56,13 +102,17 @@ class Course(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        default= None
+        default=None
     )
 
     image = models.ImageField(
         upload_to="course_images/",
         blank=True,
-        null=True
+        null=True,
+        validators=[
+            validate_file_size,
+            validate_image_extension
+        ]
     )
 
     duration = models.CharField(
@@ -100,6 +150,7 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
+
 class Assignment(models.Model):
 
     course = models.ForeignKey(
@@ -119,7 +170,11 @@ class Assignment(models.Model):
     instructions = models.FileField(
         upload_to='assignment_instructions/',
         blank=True,
-        null=True
+        null=True,
+        validators=[
+            validate_file_size,
+            validate_document_extension
+        ]
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -129,6 +184,7 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class AssignmentSubmission(models.Model):
 
@@ -149,7 +205,11 @@ class AssignmentSubmission(models.Model):
     )
 
     submission_file = models.FileField(
-        upload_to='assignment_submissions/'
+        upload_to='assignment_submissions/',
+        validators=[
+            validate_file_size,
+            validate_document_extension
+        ]
     )
 
     submitted_at = models.DateTimeField(auto_now_add=True)
@@ -175,11 +235,14 @@ class AssignmentSubmission(models.Model):
 
     def __str__(self):
         return f'{self.student.username} - {self.assignment.title}'
-    
+
 
 class Enrollment(models.Model):
+
     student = models.ForeignKey(User, on_delete=models.CASCADE)
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
     enrolled_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -188,8 +251,83 @@ class Enrollment(models.Model):
     def __str__(self):
         return f"{self.student.username} - {self.course.title}"
     
+class Cart(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE
+    )
+
+    added_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        unique_together = ('user', 'course')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.course.title}"
+
+
+class Payment(models.Model):
+
+    PAYMENT_STATUS = (
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+    )
+
+    PAYMENT_METHODS = (
+        ('UPI', 'UPI'),
+        ('Card', 'Card'),
+        ('Net Banking', 'Net Banking'),
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE
+    )
+
+    amount = models.IntegerField()
+
+    payment_method = models.CharField(
+        max_length=50,
+        choices=PAYMENT_METHODS,
+        default='UPI'
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS,
+        default='Pending'
+    )
+
+    paid_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    transaction_id = models.CharField(
+        max_length=100,
+        unique=True
+    )
+
+    def __str__(self):
+        return f"{self.user.username} - {self.course.title}"
+
+
 class Lesson(models.Model):
+
     title = models.CharField(max_length=200)
+
     content = models.TextField()
 
     video_url = models.CharField(max_length=500)
@@ -201,7 +339,8 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+
 class QuizQuestion(models.Model):
 
     course = models.ForeignKey(
@@ -230,7 +369,8 @@ class QuizQuestion(models.Model):
 
     def __str__(self):
         return f"{self.course.title} - {self.question[:50]}"
-    
+
+
 class QuizAttempt(models.Model):
 
     student = models.ForeignKey(
@@ -258,17 +398,25 @@ class QuizAttempt(models.Model):
 
     def __str__(self):
         return f'{self.student.username} - {self.course.title}'
-    
+
+
 class LessonProgress(models.Model):
 
     student = models.ForeignKey(User, on_delete=models.CASCADE)
+
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+
     completed = models.BooleanField(default=False)
+
     completed_at = models.DateTimeField(null=True, blank=True)
 
+
 class UserActivity(models.Model):
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     action = models.CharField(max_length=255)
+
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -2,95 +2,280 @@
 
 {% block content %}
 
-<div class="container mt-5">
+<style>
 
-    <h2 class="fw-bold mb-4">
-        Quiz Attempt History
-    </h2>
+.history-wrapper{
+background:rgba(17,24,39,0.92);
+border-radius:28px;
+padding:40px;
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
+color:white;
+}
 
-    {% if attempts %}
+.history-title{
+font-size:52px;
+font-weight:700;
+margin-bottom:10px;
+}
 
-    <div class="table-responsive">
+.history-subtitle{
+color:#9ca3af;
+margin-bottom:35px;
+}
 
-        <table class="table table-dark table-hover">
+.stats-card{
+background:rgba(255,255,255,0.05);
+border-radius:22px;
+padding:25px;
+text-align:center;
+transition:0.3s;
+height:100%;
+}
 
-            <thead>
+.stats-card:hover{
+transform:translateY(-5px);
+background:rgba(79,70,229,0.12);
+}
 
-                <tr>
+.stats-number{
+font-size:40px;
+font-weight:700;
+}
 
-                    <th>Course</th>
+.stats-label{
+color:#9ca3af;
+font-size:16px;
+}
 
-                    <th>Score</th>
+.quiz-card{
+background:rgba(255,255,255,0.04);
+border-radius:22px;
+padding:25px;
+margin-bottom:20px;
+transition:0.3s;
+border:1px solid rgba(255,255,255,0.06);
+}
 
-                    <th>Percentage</th>
+.quiz-card:hover{
+transform:translateY(-4px);
+background:rgba(79,70,229,0.12);
+}
 
-                    <th>Status</th>
+.course-title{
+font-size:24px;
+font-weight:600;
+}
 
-                    <th>Date</th>
+.score-box{
+font-size:34px;
+font-weight:700;
+}
 
-                </tr>
+.progress{
+height:12px;
+border-radius:20px;
+background:#1f2937;
+}
 
-            </thead>
+.progress-bar{
+border-radius:20px;
+}
 
-            <tbody>
+.attempt-date{
+color:#9ca3af;
+font-size:15px;
+}
 
-                {% for attempt in attempts %}
+.empty-box{
+background:rgba(255,255,255,0.05);
+padding:40px;
+border-radius:20px;
+text-align:center;
+}
 
-                <tr>
+body.dark-mode .history-wrapper{
+background:#111827;
+}
 
-                    <td>
-                        {{ attempt.course.title }}
-                    </td>
+body.dark-mode .stats-label,
+body.dark-mode .history-subtitle,
+body.dark-mode .attempt-date{
+color:#d1d5db;
+}
 
-                    <td>
-                        {{ attempt.score }}/{{ attempt.total_questions }}
-                    </td>
+</style>
 
-                    <td>
-                        {{ attempt.percentage }}%
-                    </td>
+<div class="history-wrapper">
 
-                    <td>
+<h1 class="history-title">
+📊 Quiz Attempt History
+</h1>
 
-                        {% if attempt.passed %}
+<p class="history-subtitle">
+Track your quiz performance and learning progress.
+</p>
 
-                            <span class="badge bg-success">
-                                Passed
-                            </span>
+{% if attempts %}
 
-                        {% else %}
+<div class="row mb-5 g-4">
 
-                            <span class="badge bg-danger">
-                                Failed
-                            </span>
+<div class="col-md-4">
 
-                        {% endif %}
+<div class="stats-card">
 
-                    </td>
+<div class="stats-number">
+{{ attempts|length }}
+</div>
 
-                    <td>
-                        {{ attempt.attempted_at }}
-                    </td>
+<div class="stats-label">
+Total Attempts
+</div>
 
-                </tr>
+</div>
 
-                {% endfor %}
+</div>
 
-            </tbody>
+<div class="col-md-4">
 
-        </table>
+<div class="stats-card">
 
-    </div>
+<div class="stats-number">
 
-    {% else %}
+{% with attempts.0 as latest %}
+{{ latest.percentage|floatformat:2 }}%
+{% endwith %}
 
-        <div class="alert alert-info">
+</div>
 
-            No quiz attempts found.
+<div class="stats-label">
+Latest Score
+</div>
 
-        </div>
+</div>
 
-    {% endif %}
+</div>
+
+<div class="col-md-4">
+
+<div class="stats-card">
+
+<div class="stats-number">
+
+{% for attempt in attempts %}
+{% if forloop.first %}
+{{ attempt.course.title }}
+{% endif %}
+{% endfor %}
+
+</div>
+
+<div class="stats-label">
+Recent Course
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% for attempt in attempts %}
+
+<div class="quiz-card">
+
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+
+<div>
+
+<div class="course-title">
+{{ attempt.course.title }}
+</div>
+
+<div class="attempt-date">
+{{ attempt.attempted_at }}
+</div>
+
+</div>
+
+<div>
+
+{% if attempt.passed %}
+
+<span class="badge bg-success p-2 px-3">
+✅ Passed
+</span>
+
+{% else %}
+
+<span class="badge bg-danger p-2 px-3">
+❌ Failed
+</span>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<div class="row align-items-center">
+
+<div class="col-md-3">
+
+<div class="score-box">
+{{ attempt.score }}/{{ attempt.total_questions }}
+</div>
+
+<div class="text-muted">
+Correct Answers
+</div>
+
+</div>
+
+<div class="col-md-9">
+
+<h5 class="fw-bold mb-2">
+{{ attempt.percentage|floatformat:2 }}%
+</h5>
+
+<div class="progress">
+
+<div class="progress-bar
+{% if attempt.percentage >= 70 %}
+bg-success
+{% elif attempt.percentage >= 40 %}
+bg-warning
+{% else %}
+bg-danger
+{% endif %}"
+style="width: {{ attempt.percentage }}%">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty-box">
+
+<h3 class="mb-3">
+No Quiz Attempts Yet
+</h3>
+
+<p class="text-muted">
+Complete quizzes to start tracking your performance analytics.
+</p>
+
+</div>
+
+{% endif %}
 
 </div>
 

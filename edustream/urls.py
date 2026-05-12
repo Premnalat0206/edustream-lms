@@ -33,7 +33,11 @@ urlpatterns = [
     path('course/<int:course_id>/', course_detail, name='course_detail'),
     path('my-courses/', my_courses, name='my_courses'),
     path('quiz/<int:course_id>/', quiz_view, name='quiz'),
-    path('certificate/<int:course_id>/', generate_certificate, name='certificate'),
+    path(
+    'certificate/<int:course_id>/',
+    generate_certificate,
+    name='generate_certificate'
+),
     path('dashboard/', dashboard, name='dashboard'),
     path('logout/', LogoutView.as_view(next_page='/login/'), name='logout'),
     path('complete-lesson/<int:lesson_id>/', complete_lesson, name='complete_lesson'),
@@ -41,6 +45,29 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path("login/", views.login_view, name="login"),
     path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
+    path(
+    'admin-courses/',
+    views.admin_courses,
+    name='admin_courses'
+),
+
+path(
+    'add-course/',
+    views.add_course,
+    name='add_course'
+),
+
+path(
+    'edit-course/<int:course_id>/',
+    views.edit_course,
+    name='edit_course'
+),
+
+path(
+    'delete-course/<int:course_id>/',
+    views.delete_course,
+    name='delete_course'
+),
     path(
     'course/<int:course_id>/assignments/',
     assignment_list,
@@ -73,6 +100,29 @@ path(
     views.leaderboard,
     name='leaderboard'
 ),
+path(
+    'add-to-cart/<int:course_id>/',
+    views.add_to_cart,
+    name='add_to_cart'
+),
+
+path(
+    'cart/',
+    views.cart_view,
+    name='cart'
+),
+
+path(
+    'remove-from-cart/<int:cart_id>/',
+    views.remove_from_cart,
+    name='remove_from_cart'
+),
+path(
+    'checkout/',
+    views.checkout,
+    name='checkout'
+),
+
     
 ]
 

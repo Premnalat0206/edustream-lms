@@ -1,0 +1,193 @@
+{% extends 'courses/base.html' %}
+
+{% block content %}
+
+<style>
+
+.checkout-wrapper{
+background:rgba(17,24,39,0.95);
+border-radius:30px;
+padding:40px;
+color:white;
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
+}
+
+.checkout-title{
+font-size:52px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.checkout-subtitle{
+color:#9ca3af;
+margin-bottom:40px;
+}
+
+.payment-card{
+background:rgba(255,255,255,0.05);
+border-radius:24px;
+padding:30px;
+margin-bottom:25px;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.payment-option{
+background:rgba(255,255,255,0.04);
+padding:18px;
+border-radius:16px;
+margin-bottom:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.payment-option:hover{
+background:rgba(79,70,229,0.15);
+}
+
+.summary-box{
+background:rgba(255,255,255,0.05);
+border-radius:24px;
+padding:30px;
+}
+
+.pay-btn{
+background:linear-gradient(135deg,#4f46e5,#7c3aed);
+border:none;
+padding:16px;
+width:100%;
+border-radius:16px;
+font-size:20px;
+font-weight:700;
+color:white;
+transition:0.3s;
+}
+
+.pay-btn:hover{
+transform:translateY(-2px);
+}
+
+</style>
+
+<div class="checkout-wrapper">
+
+<h1 class="checkout-title">
+💳 Checkout
+</h1>
+
+<p class="checkout-subtitle">
+Complete your payment and unlock premium learning.
+</p>
+
+<div class="row g-4">
+
+<div class="col-lg-8">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="payment-card">
+
+<h3 class="fw-bold mb-4">
+Select Payment Method
+</h3>
+
+<label class="payment-option d-block">
+
+<input type="radio"
+name="payment_method"
+value="UPI"
+checked>
+
+📱 UPI Payment
+
+</label>
+
+<label class="payment-option d-block">
+
+<input type="radio"
+name="payment_method"
+value="Card">
+
+💳 Credit / Debit Card
+
+</label>
+
+<label class="payment-option d-block">
+
+<input type="radio"
+name="payment_method"
+value="Net Banking">
+
+🏦 Net Banking
+
+</label>
+
+</div>
+
+<button type="submit"
+class="pay-btn">
+
+Pay ₹{{ final_total }}
+
+</button>
+
+</form>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="summary-box">
+
+<h3 class="fw-bold mb-4">
+Order Summary
+</h3>
+
+{% for item in cart_items %}
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+{{ item.course.title }}
+</span>
+
+<strong>
+₹{{ item.course.price }}
+</strong>
+
+</div>
+
+{% endfor %}
+
+<hr class="border-light">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>GST</span>
+
+<strong>
+₹{{ gst }}
+</strong>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<h4>Total</h4>
+
+<h4 class="text-success">
+₹{{ final_total }}
+</h4>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
