@@ -1,0 +1,59 @@
+{% extends 'courses/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="fw-bold mb-4 text-center">
+        Student Leaderboard
+    </h2>
+
+    <div class="table-responsive">
+
+        <table class="table table-dark table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Rank</th>
+
+                    <th>Student</th>
+
+                    <th>Average Percentage</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for student in leaderboard_data %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td>
+                        {{ student.student__username }}
+                    </td>
+
+                    <td>
+                        {{ student.average_score|floatformat:2 }}%
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

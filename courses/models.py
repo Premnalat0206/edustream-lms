@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Category(models.Model):
 
@@ -97,6 +99,82 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+class Assignment(models.Model):
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='assignments'
+    )
+
+    title = models.CharField(max_length=255)
+
+    description = models.TextField()
+
+    due_date = models.DateTimeField()
+
+    total_marks = models.PositiveIntegerField(default=100)
+
+    instructions = models.FileField(
+        upload_to='assignment_instructions/',
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_overdue(self):
+        return timezone.now() > self.due_date
+
+    def __str__(self):
+        return self.title
+
+class AssignmentSubmission(models.Model):
+
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Reviewed', 'Reviewed'),
+    )
+
+    assignment = models.ForeignKey(
+        Assignment,
+        on_delete=models.CASCADE,
+        related_name='submissions'
+    )
+
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    submission_file = models.FileField(
+        upload_to='assignment_submissions/'
+    )
+
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    marks_obtained = models.PositiveIntegerField(
+        blank=True,
+        null=True
+    )
+
+    feedback = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='Pending'
+    )
+
+    class Meta:
+        unique_together = ('assignment', 'student')
+
+    def __str__(self):
+        return f'{self.student.username} - {self.assignment.title}'
     
 
 class Enrollment(models.Model):
@@ -152,6 +230,34 @@ class QuizQuestion(models.Model):
 
     def __str__(self):
         return f"{self.course.title} - {self.question[:50]}"
+    
+class QuizAttempt(models.Model):
+
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE
+    )
+
+    score = models.IntegerField()
+
+    total_questions = models.IntegerField()
+
+    percentage = models.FloatField()
+
+    passed = models.BooleanField(default=False)
+
+    attempted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-attempted_at']
+
+    def __str__(self):
+        return f'{self.student.username} - {self.course.title}'
     
 class LessonProgress(models.Model):
 

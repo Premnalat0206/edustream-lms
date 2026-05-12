@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+Which language structures web pages?,HTML,Python,Java,C++,1
+Which language styles web pages?,CSS,HTML,SQL,Java,1
+Which language adds interactivity?,JavaScript,HTML,CSS,SQL,1
+Which framework is used for backend Python?,Django,React,Vue,Angular,1
+Which database is relational?,MySQL,MongoDB,Redis,Firebase,1
+Which tag creates hyperlink?,a,img,p,div,1
+Which CSS property changes color?,color,font,align,size,1
+Which HTTP method retrieves data?,GET,PUSH,RUN,EXECUTE,1
+Which HTTP method sends data?,POST,GET,FETCH,OPEN,1
+Which JavaScript keyword declares variable?,let,define,make,varies,1
+Which framework builds UI components?,React,Django,Laravel,Flask,1
+Which tool manages packages in Node.js?,npm,pip,maven,gradle,1
+Which database is NoSQL?,MongoDB,MySQL,PostgreSQL,Oracle,1
+Which HTML tag creates form?,form,input,button,table,1
+Which CSS framework is popular?,Bootstrap,Django,Flask,Laravel,1
+Which protocol secures websites?,HTTPS,FTP,SMTP,POP3,1
+Which command initializes git repository?,git init,git start,git run,git create,1
+Which branch is default in git?,main,master,root,base,1
+Which JavaScript framework uses components?,React,Django,Spring,Laravel,1
+Which API format is commonly used?,JSON,XMLDOC,PDF,DOCX,1

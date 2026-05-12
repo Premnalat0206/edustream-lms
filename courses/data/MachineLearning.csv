@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+Which algorithm predicts categories?,Classification,Regression,Clustering,Sorting,1
+Which algorithm predicts numerical values?,Regression,Classification,Clustering,Association,1
+Which learning uses unlabeled data?,Unsupervised Learning,Supervised Learning,Reinforcement Learning,Transfer Learning,1
+Which metric measures classification performance?,Accuracy,Latency,Bandwidth,Storage,1
+Which library supports machine learning?,Scikit-learn,Django,Bootstrap,React,1
+Which algorithm groups similar data?,Clustering,Regression,Sorting,Hashing,1
+Which technique prevents overfitting?,Regularization,Compression,Encryption,Caching,1
+Which split evaluates model?,Test Data,Training Data,Raw Data,Backup Data,1
+Which algorithm uses decision trees?,Random Forest,KNN,Linear Regression,Naive Bayes,1
+Which algorithm finds nearest neighbors?,KNN,CNN,RNN,SVM,1
+Which model separates classes with hyperplane?,SVM,KNN,CNN,RNN,1
+Which process improves learning?,Training,Formatting,Compilation,Rendering,1
+Which chart visualizes confusion matrix?,Heatmap,Histogram,Pie Chart,Line Chart,1
+Which metric balances precision and recall?,F1 Score,Latency,Storage,Accuracy,1
+Which algorithm is probabilistic?,Naive Bayes,Random Forest,SVM,KNN,1
+Which technique scales features?,Normalization,Compression,Compilation,Rendering,1
+Which dataset trains model?,Training Dataset,Testing Dataset,Backup Dataset,Archive Dataset,1
+Which algorithm handles sequential data?,RNN,CNN,KNN,SVM,1
+Which model handles image recognition?,CNN,RNN,KNN,SVM,1
+Which process selects important features?,Feature Selection,Data Compression,Encryption,Formatting,1

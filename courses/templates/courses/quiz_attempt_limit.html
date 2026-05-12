@@ -1,0 +1,56 @@
+{% extends "courses/base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow border-0 text-center">
+
+                <div class="card-body p-5">
+
+                    <h1 class="text-danger mb-4">
+                        Quiz Attempt Limit Reached
+                    </h1>
+
+                    <p class="lead">
+
+                        You have already used all
+
+                        <strong>
+                            {{ max_attempts }}
+                        </strong>
+
+                        quiz attempts for:
+
+                    </p>
+
+                    <h3 class="fw-bold mt-3">
+                        {{ course.title }}
+                    </h3>
+
+                    <div class="mt-4">
+
+                        <a href="{% url 'course_detail' course.id %}"
+                           class="btn btn-dark">
+
+                            Back to Course
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

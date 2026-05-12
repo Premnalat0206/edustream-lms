@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+What does AI stand for?,Artificial Intelligence,Automated Internet,Artificial Integration,Advanced Interface,1
+Which AI field processes language?,NLP,Computer Vision,Robotics,Networking,1
+Which AI model learns from data?,Machine Learning,Compiler,Database,Firewall,1
+Which AI field analyzes images?,Computer Vision,NLP,Networking,Cloud,1
+Which algorithm groups data?,Clustering,Regression,Sorting,Compilation,1
+Which learning uses labeled data?,Supervised Learning,Unsupervised Learning,Reinforcement Learning,Transfer Learning,1
+Which learning uses rewards?,Reinforcement Learning,Supervised Learning,Clustering,Regression,1
+Which company created ChatGPT?,OpenAI,Google,Microsoft,Amazon,1
+Which AI technique mimics human brain?,Neural Network,Sorting,Hashing,Compression,1
+Which AI assistant uses voice?,Siri,Excel,Chrome,Word,1
+Which algorithm predicts continuous values?,Regression,Clustering,Classification,Sorting,1
+Which algorithm predicts categories?,Classification,Regression,Sorting,Compression,1
+Which language is common in AI?,Python,HTML,CSS,PHP,1
+Which library supports AI?,TensorFlow,Bootstrap,Laravel,React,1
+Which dataset trains AI models?,Training Data,Cache Data,Backup Data,Log Data,1
+Which AI area controls robots?,Robotics,NLP,Cloud,Networking,1
+Which process improves model performance?,Training,Formatting,Compression,Rendering,1
+Which AI term means model accuracy?,Precision,Latency,Bandwidth,Storage,1
+Which model recognizes speech?,Speech Recognition,Firewall,Compiler,Encryption,1
+Which technology powers recommendation systems?,Machine Learning,HTML,CSS,FTP,1

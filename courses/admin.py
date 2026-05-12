@@ -2,6 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
+from .models import QuizAttempt
 
 from .models import (
     Course,
@@ -73,3 +74,25 @@ class LessonAdmin(ImportExportModelAdmin):
 @admin.register(QuizQuestion)
 class QuizQuestionAdmin(ImportExportModelAdmin):
     pass
+
+@admin.register(QuizAttempt)
+class QuizAttemptAdmin(ImportExportModelAdmin):
+
+    list_display = (
+        'student',
+        'course',
+        'score',
+        'percentage',
+        'passed',
+        'attempted_at'
+    )
+
+    list_filter = (
+        'passed',
+        'course'
+    )
+
+    search_fields = (
+        'student__username',
+        'course__title'
+    )

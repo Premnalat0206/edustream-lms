@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+What is phishing?,Email scam,Firewall attack,Password encryption,Network cable attack,1
+Which tool monitors network packets?,Wireshark,Excel,Photoshop,Word,1
+Which attack overloads servers?,DDoS,Phishing,Sniffing,Spoofing,1
+What does firewall do?,Blocks unauthorized access,Deletes files,Stores data,Compiles code,1
+Which malware locks files?,Ransomware,Spyware,Adware,Rootkit,1
+Which protocol secures web traffic?,HTTPS,FTP,HTTP,SMTP,1
+Which attack steals credentials?,Phishing,Encryption,Compression,Compilation,1
+Which tool scans vulnerabilities?,Nmap,Excel,Photoshop,Word,1
+Which attack listens to network traffic?,Sniffing,DDoS,Phishing,Malware,1
+What does VPN provide?,Secure connection,Free storage,Antivirus,Compiler,1
+Which malware records keystrokes?,Keylogger,Trojan,Worm,Adware,1
+Which attack uses fake identity?,Spoofing,Sniffing,Phishing,DDoS,1
+Which device filters traffic?,Firewall,Router,Switch,Hub,1
+Which protocol transfers files securely?,SFTP,HTTP,FTP,TCP,1
+What is ethical hacking?,Authorized testing,Illegal hacking,Programming,Networking,1
+Which attack targets passwords?,Brute Force,Sniffing,Routing,Compression,1
+Which malware self-replicates?,Worm,Trojan,Spyware,Adware,1
+Which principle limits access?,Least Privilege,Full Access,Anonymous Access,Open Access,1
+Which security model trusts nobody?,Zero Trust,Open Trust,Cloud Trust,Free Trust,1
+Which tool tests web vulnerabilities?,Burp Suite,Excel,Paint,Word,1

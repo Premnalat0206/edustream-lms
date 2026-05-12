@@ -1,44 +1,21 @@
-course,question,option1,option2,option3,option4,correct_option
-12,What does EC2 stand for?,Elastic Compute Cloud,Elastic Container Cloud,Edge Compute Cloud,Elastic Control Center,1
-12,Which AWS service stores files?,S3,RDS,EC2,Lambda,1
-12,Which AWS service runs serverless code?,Lambda,EC2,S3,Route53,1
-12,Which AWS service manages databases?,RDS,S3,EC2,Lambda,1
-12,Which AWS service handles DNS?,Route53,S3,EC2,RDS,1
-12,Which AWS tool monitors performance?,CloudWatch,EC2,S3,Route53,1
-12,Which AWS service provides virtual machines?,EC2,Lambda,S3,RDS,1
-12,Which AWS service manages access?,IAM,S3,EC2,RDS,1
-12,Which AWS storage type is object storage?,S3,EBS,EC2,RDS,1
-12,Which AWS service delivers content globally?,CloudFront,EC2,S3,RDS,1
-
-13,What is phishing?,Email scam,Firewall attack,Password encryption,Network cable attack,1
-13,Which tool monitors network packets?,Wireshark,Excel,Photoshop,Word,1
-13,Which attack overloads servers?,DDoS,Phishing,Sniffing,Spoofing,1
-13,What does firewall do?,Blocks unauthorized access,Deletes files,Stores data,Compiles code,1
-13,Which malware locks files?,Ransomware,Spyware,Adware,Rootkit,1
-13,Which security model uses authentication?,Zero Trust,Cloud Model,Open Model,Free Model,1
-13,Which protocol secures web traffic?,HTTPS,FTP,HTTP,SMTP,1
-13,Which attack steals credentials?,Phishing,Encryption,Compression,Compilation,1
-13,Which tool scans vulnerabilities?,Nmap,Excel,Photoshop,Word,1
-13,Which attack listens to network traffic?,Sniffing,DDoS,Phishing,Malware,1
-
-3,Which library is used for data analysis?,Pandas,Flask,Django,React,1
-3,Which library handles arrays?,NumPy,Vue,Spring,Angular,1
-3,Which library creates charts?,Matplotlib,Node,Express,Laravel,1
-3,Which library supports statistics?,SciPy,React,Django,Vue,1
-3,Which method reads CSV in Pandas?,read_csv,read_data,read_table,read_excel,1
-3,Which function shows first rows?,head(),top(),show(),first(),1
-3,Which method removes null values?,dropna,delete,remove,clean,1
-3,Which library visualizes data?,Matplotlib,Flask,Django,Spring,1
-3,Which structure stores tabular data?,DataFrame,List,Tuple,Set,1
-3,Which method groups data?,groupby,collect,combine,join,1
-
-10,What does SQL stand for?,Structured Query Language,Simple Query Language,Standard Query Logic,System Query Language,1
-10,Which command retrieves data?,SELECT,INSERT,UPDATE,DELETE,1
-10,Which clause filters records?,WHERE,GROUP BY,ORDER BY,HAVING,1
-10,Which command inserts records?,INSERT,SELECT,DELETE,UPDATE,1
-10,Which command deletes records?,DELETE,SELECT,INSERT,CREATE,1
-10,Which keyword sorts results?,ORDER BY,WHERE,GROUP BY,JOIN,1
-10,Which clause groups rows?,GROUP BY,ORDER BY,JOIN,WHERE,1
-10,Which join returns matching rows?,INNER JOIN,LEFT JOIN,RIGHT JOIN,FULL JOIN,1
-10,Which key identifies row uniquely?,Primary Key,Foreign Key,Unique Key,Index,1
-10,Which key links tables?,Foreign Key,Primary Key,Index,Unique Key,1
+question,option1,option2,option3,option4,correct_option
+What does EC2 stand for?,Elastic Compute Cloud,Elastic Container Cloud,Edge Compute Cloud,Elastic Control Center,1
+Which AWS service stores files?,S3,RDS,EC2,Lambda,1
+Which AWS service runs serverless code?,Lambda,EC2,S3,Route53,1
+Which AWS service manages databases?,RDS,S3,EC2,Lambda,1
+Which AWS service handles DNS?,Route53,S3,EC2,RDS,1
+Which AWS tool monitors performance?,CloudWatch,EC2,S3,Route53,1
+Which AWS service provides virtual machines?,EC2,Lambda,S3,RDS,1
+Which AWS service manages access?,IAM,S3,EC2,RDS,1
+Which AWS storage type is object storage?,S3,EBS,EC2,RDS,1
+Which AWS service delivers content globally?,CloudFront,EC2,S3,RDS,1
+Which AWS service is used for backups?,Glacier,S3,EC2,RDS,1
+Which AWS service manages containers?,ECS,RDS,EC2,S3,1
+Which service provides scalable databases?,RDS,Lambda,S3,Route53,1
+Which AWS service supports machine learning?,SageMaker,S3,EC2,RDS,1
+Which AWS service is used for CDN?,CloudFront,RDS,EC2,S3,1
+What does IAM stand for?,Identity and Access Management,Internet Access Management,Internal Access Module,Identity Admin Model,1
+Which AWS service provides NoSQL database?,DynamoDB,RDS,S3,EC2,1
+Which AWS service sends notifications?,SNS,S3,RDS,EC2,1
+Which AWS service manages queues?,SQS,RDS,EC2,S3,1
+Which AWS service automates deployment?,CodeDeploy,S3,EC2,RDS,1

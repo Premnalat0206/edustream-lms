@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+Which company developed React?,Facebook,Google,Amazon,Microsoft,1
+Which syntax extension does React use?,JSX,XML,PHP,SQL,1
+Which hook manages state?,useState,useEffect,useRef,useMemo,1
+Which hook handles side effects?,useEffect,useState,useRef,useMemo,1
+Which command creates React app?,npx create-react-app,react-start,react-init,npm-react,1
+Which component type uses hooks?,Functional Component,Class Component,HTML Component,CSS Component,1
+Which prop passes data to component?,props,state,data,hook,1
+Which method renders UI?,render(),show(),display(),print(),1
+Which package manages routing?,React Router,Django Router,Vue Router,Laravel Router,1
+Which hook references DOM?,useRef,useState,useEffect,useMemo,1
+Which hook optimizes performance?,useMemo,useState,useRef,useEffect,1
+Which keyword exports component?,export,share,send,public,1
+Which function updates state?,setState(),update(),modify(),change(),1
+Which tool bundles React apps?,Webpack,Flask,Django,Laravel,1
+Which attribute adds CSS classes?,className,class,style,id,1
+Which lifecycle method runs after mount?,componentDidMount,componentStart,componentRun,componentInit,1
+Which hook handles context?,useContext,useState,useEffect,useMemo,1
+Which file contains dependencies?,package.json,settings.py,config.xml,index.html,1
+Which method handles events?,onClick,onHover,onMove,onPress,1
+Which React feature reuses UI?,Components,Templates,Tables,Frames,1

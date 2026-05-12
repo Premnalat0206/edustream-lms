@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+Which keyword creates object?,new,class,this,static,1
+Which method starts Java program?,main(),start(),run(),execute(),1
+Which keyword is used for inheritance?,extends,implements,inherits,super,1
+Which package is imported automatically?,java.lang,java.util,java.io,java.net,1
+Which keyword prevents inheritance?,final,static,const,private,1
+Which collection stores unique values?,Set,List,Array,Map,1
+Which keyword refers current object?,this,self,current,super,1
+Which concept allows many forms?,Polymorphism,Inheritance,Encapsulation,Abstraction,1
+Which exception occurs dividing by zero?,ArithmeticException,IOException,NullPointerException,SQLException,1
+Which loop executes at least once?,do-while,for,while,foreach,1
+Which keyword handles exceptions?,try,check,catching,throwing,1
+Which access modifier is most restrictive?,private,protected,public,default,1
+Which keyword creates constant?,final,const,static,define,1
+Which operator concatenates strings?,+,&,*,%,1
+Which class handles input?,Scanner,Input,Reader,Console,1
+Which method compares strings?,equals(),compare(),check(),match(),1
+Which keyword creates interface implementation?,implements,extends,interface,inherit,1
+Which JVM component loads classes?,ClassLoader,Compiler,Executor,Parser,1
+Which package contains collections?,java.util,java.io,java.net,java.lang,1
+Which keyword calls parent constructor?,super,this,parent,base,1

@@ -1,5 +1,7 @@
 {% extends "courses/base.html" %}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 {% block content %}
 
 <div class="container py-4">
@@ -8,143 +10,255 @@
 
 <div class="d-flex justify-content-between align-items-center mb-5">
 
-<div>
+    <div>
 
-<h1 class="fw-bold">
-Student Dashboard
-</h1>
+        <h1 class="fw-bold">
+            Student Dashboard
+        </h1>
 
-<p class="text-muted">
-Track your learning progress and achievements.
-</p>
+        <p class="text-muted">
+            Track your learning progress and achievements.
+        </p>
+
+    </div>
+
+    <a href="/courses/" class="btn btn-primary btn-lg">
+        Browse Courses
+    </a>
 
 </div>
 
-<a href="/courses/" class="btn btn-primary btn-lg">
-Browse Courses
-</a>
-
-</div>
-
-<!-- STATS -->
+<!-- MAIN STATS -->
 
 <div class="row g-4 mb-5">
 
-<div class="col-md-4">
+    <div class="col-md-4">
 
-<div class="card border-0 shadow-lg p-4 text-center h-100">
+        <div class="card border-0 shadow-lg p-4 text-center h-100">
 
-<h6 class="text-muted mb-3">
-Enrolled Courses
-</h6>
+            <h6 class="text-muted mb-3">
+                Enrolled Courses
+            </h6>
 
-<h1 class="fw-bold text-primary">
-{{ total_courses }}
-</h1>
+            <h1 class="fw-bold text-primary">
+                {{ total_courses }}
+            </h1>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card border-0 shadow-lg p-4 text-center h-100">
+
+            <h6 class="text-muted mb-3">
+                Total Lessons
+            </h6>
+
+            <h1 class="fw-bold text-success">
+                {{ total_lessons }}
+            </h1>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card border-0 shadow-lg p-4 text-center h-100">
+
+            <h6 class="text-muted mb-3">
+                Completed Lessons
+            </h6>
+
+            <h1 class="fw-bold text-danger">
+                {{ completed_lessons }}
+            </h1>
+
+        </div>
+
+    </div>
 
 </div>
 
+<!-- QUIZ ANALYTICS -->
+
+<div class="row mt-4 mb-5">
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow border-0 text-center h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    Quiz Attempts
+                </h5>
+
+                <h2 class="text-primary">
+                    {{ total_attempts }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow border-0 text-center h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    Average Score
+                </h5>
+
+                <h2 class="text-success">
+                    {{ average_score }}%
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow border-0 text-center h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    Pass Percentage
+                </h5>
+
+                <h2 class="text-warning">
+                    {{ pass_percentage }}%
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow border-0 text-center h-100">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    Latest Score
+                </h5>
+
+                <h2 class="text-danger">
+
+                    {% if latest_attempt %}
+
+                        {{ latest_attempt.percentage }}%
+
+                    {% else %}
+
+                        0%
+
+                    {% endif %}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="col-md-4">
-
-<div class="card border-0 shadow-lg p-4 text-center h-100">
-
-<h6 class="text-muted mb-3">
-Total Lessons
-</h6>
-
-<h1 class="fw-bold text-success">
-{{ total_lessons }}
-</h1>
-
-</div>
-
-</div>
-
-<div class="col-md-4">
-
-<div class="card border-0 shadow-lg p-4 text-center h-100">
-
-<h6 class="text-muted mb-3">
-Completed Lessons
-</h6>
-
-<h1 class="fw-bold text-danger">
-{{ completed_lessons }}
-</h1>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- PROGRESS SECTION -->
+<!-- CHARTS SECTION -->
 
 <div class="row g-4 mb-5">
 
-<div class="col-lg-8">
+    <div class="col-lg-8">
 
-<div class="card border-0 shadow-lg p-4">
+        <div class="card border-0 shadow-lg p-4">
 
-<h4 class="fw-bold mb-4">
-Learning Progress
-</h4>
+            <h4 class="fw-bold mb-4">
+                Learning Progress
+            </h4>
 
-<canvas id="progressChart"></canvas>
+            <canvas id="progressChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-lg p-4 h-100">
+
+            <h4 class="fw-bold mb-4">
+                Achievements
+            </h4>
+
+            <div class="mb-4">
+
+                <h6 class="fw-bold">
+                    🏆 Course Explorer
+                </h6>
+
+                <p class="text-muted small">
+                    Enrolled in multiple courses.
+                </p>
+
+            </div>
+
+            <div class="mb-4">
+
+                <h6 class="fw-bold">
+                    🔥 Fast Learner
+                </h6>
+
+                <p class="text-muted small">
+                    Completed lessons successfully.
+                </p>
+
+            </div>
+
+            <div>
+
+                <h6 class="fw-bold">
+                    🎯 Goal Achiever
+                </h6>
+
+                <p class="text-muted small">
+                    Consistent learning progress.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
-</div>
+<!-- QUIZ ANALYTICS CHART -->
 
-<div class="col-lg-4">
+<div class="card shadow border-0 mt-5 mb-5">
 
-<div class="card border-0 shadow-lg p-4 h-100">
+    <div class="card-body">
 
-<h4 class="fw-bold mb-4">
-Achievements
-</h4>
+        <h4 class="fw-bold mb-4 text-center">
+            Quiz Performance Analytics
+        </h4>
 
-<div class="mb-4">
+        <canvas id="quizChart"></canvas>
 
-<h6 class="fw-bold">
-🏆 Course Explorer
-</h6>
-
-<p class="text-muted small">
-Enrolled in multiple courses.
-</p>
-
-</div>
-
-<div class="mb-4">
-
-<h6 class="fw-bold">
-🔥 Fast Learner
-</h6>
-
-<p class="text-muted small">
-Completed lessons successfully.
-</p>
-
-</div>
-
-<div>
-
-<h6 class="fw-bold">
-🎯 Goal Achiever
-</h6>
-
-<p class="text-muted small">
-Consistent learning progress.
-</p>
-
-</div>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
@@ -152,29 +266,30 @@ Consistent learning progress.
 
 <div class="card border-0 shadow-lg p-4">
 
-<h4 class="fw-bold mb-4">
-Quick Actions
-</h4>
+    <h4 class="fw-bold mb-4">
+        Quick Actions
+    </h4>
 
-<div class="d-flex flex-wrap gap-3">
+    <div class="d-flex flex-wrap gap-3">
 
-<a href="/courses/" class="btn btn-primary">
-Explore Courses
-</a>
+        <a href="/courses/" class="btn btn-primary">
+            Explore Courses
+        </a>
 
-<a href="/my-courses/" class="btn btn-success">
-My Learning
-</a>
+        <a href="/my-courses/" class="btn btn-success">
+            My Learning
+        </a>
 
-<a href="/dashboard/" class="btn btn-dark">
-Refresh Dashboard
-</a>
+        <a href="/dashboard/" class="btn btn-dark">
+            Refresh Dashboard
+        </a>
+
+    </div>
+
+</div>
 
 </div>
 
-</div>
-
-</div>
 
 <!-- CHART JS -->
 
@@ -182,45 +297,120 @@ Refresh Dashboard
 
 <script>
 
-const ctx = document.getElementById('progressChart');
+document.addEventListener("DOMContentLoaded", function () {
 
-new Chart(ctx, {
+    // LEARNING PROGRESS CHART
 
-type: 'bar',
+    const progressCtx = document.getElementById('progressChart');
 
-data: {
+    new Chart(progressCtx, {
 
-labels: ['Courses', 'Lessons', 'Completed'],
+        type: 'bar',
 
-datasets: [{
+        data: {
 
-label: 'Learning Analytics',
+            labels: [
 
-data: [
-{{ total_courses }},
-{{ total_lessons }},
-{{ completed_lessons }}
-],
+                'Courses',
 
-borderWidth: 1
+                'Lessons',
 
-}]
+                'Completed'
 
-},
+            ],
 
-options: {
+            datasets: [{
 
-responsive: true,
+                label: 'Learning Analytics',
 
-plugins: {
+                data: [
 
-legend: {
-display: true
-}
+                    {{ total_courses }},
 
-}
+                    {{ total_lessons }},
 
-}
+                    {{ completed_lessons }}
+
+                ],
+
+                borderWidth: 1
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    display: true
+                }
+
+            }
+
+        }
+
+    });
+
+    // QUIZ ANALYTICS CHART
+
+    const quizCtx = document.getElementById('quizChart');
+
+    new Chart(quizCtx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: [
+
+                'Average Score',
+
+                'Pass Percentage'
+
+            ],
+
+            datasets: [{
+
+                label: 'Quiz Analytics',
+
+                data: [
+
+                    {{ average_score }},
+
+                    {{ pass_percentage }}
+
+                ],
+
+                borderWidth: 1
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    max: 100
+
+                }
+
+            }
+
+        }
+
+    });
 
 });
 

@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+Which library supports deep learning?,TensorFlow,Django,Flask,React,1
+Which component processes input in neural networks?,Neuron,Router,Compiler,Cache,1
+Which activation function outputs 0 or 1?,Sigmoid,ReLU,Tanh,Softmax,1
+Which layer receives data?,Input Layer,Hidden Layer,Output Layer,Dense Layer,1
+Which optimizer is commonly used?,Adam,Sort,Merge,Compile,1
+Which function calculates error?,Loss Function,Compile Function,Train Function,Dense Function,1
+Which layer reduces dimensions?,Pooling Layer,Input Layer,Dense Layer,Dropout Layer,1
+Which process adjusts weights?,Backpropagation,Compilation,Rendering,Caching,1
+Which dataset is used for image recognition?,MNIST,IMDb,CSV,Excel,1
+Which activation avoids vanishing gradient?,ReLU,Sigmoid,Tanh,Linear,1
+Which API simplifies TensorFlow?,Keras,NumPy,Pandas,Flask,1
+Which model predicts categories?,Classification,Regression,Clustering,Sorting,1
+Which technique prevents overfitting?,Dropout,Flatten,Compile,Pooling,1
+Which layer converts matrix to vector?,Flatten,Dense,Input,Conv2D,1
+Which model handles images?,CNN,RNN,SVM,KNN,1
+Which model handles sequences?,RNN,CNN,KNN,Linear,1
+Which file stores trained model?,H5,CSV,TXT,DOCX,1
+Which metric measures accuracy?,Accuracy,Latency,Speed,Size,1
+Which method trains model?,fit(),train(),run(),execute(),1
+Which method evaluates model?,evaluate(),test(),measure(),check(),1

@@ -6,7 +6,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 import datetime
-from .models import Course, Lesson, Enrollment, QuizQuestion, LessonProgress, UserActivity
+from .assignment_views import *
+from .models import Course, Lesson, Enrollment, QuizQuestion, LessonProgress, UserActivity,QuizAttempt
+from .quiz_views import *
+from django.db.models import Avg
+
 
 # COURSE LIST + SEARCH
 @login_required
@@ -139,6 +143,7 @@ def my_courses(request):
 
 
 # QUIZ VIEW
+# QUIZ VIEW
 @login_required
 def quiz_view(request, course_id):
 
@@ -146,40 +151,124 @@ def quiz_view(request, course_id):
 
     questions = QuizQuestion.objects.filter(course=course)
 
+    # ATTEMPT RESTRICTION
+    attempt_count = QuizAttempt.objects.filter(
+        student=request.user,
+        course=course
+    ).count()
+
+    MAX_ATTEMPTS = 3
+
+    if attempt_count >= MAX_ATTEMPTS:
+
+      return render(request, "courses/quiz_attempt_limit.html", {
+
+        "course": course,
+
+        "max_attempts": MAX_ATTEMPTS
+
+    })
+
+    # LESSON COMPLETION CHECK
     lessons = Lesson.objects.filter(course=course)
+
     total_lessons = lessons.count()
 
     completed = LessonProgress.objects.filter(
-    student=request.user,
-    lesson__course=course,
-    completed=True
+        student=request.user,
+        lesson__course=course,
+        completed=True
     ).count()
 
     if completed < total_lessons:
-        return HttpResponse("Complete all lessons before attempting the quiz.")
 
+        return HttpResponse(
+            "Complete all lessons before attempting the quiz."
+        )
+
+    # QUIZ SUBMISSION
     if request.method == "POST":
 
         score = 0
-        total = questions.count()
 
         for q in questions:
 
             answer = request.POST.get(f"question_{q.id}")
 
             if answer and int(answer) == q.correct_option:
+
                 score += 1
 
+        total_questions = questions.count()
+
+        percentage = (score / total_questions) * 100
+
+        passed = percentage >= 40
+
+        # STORE QUIZ ATTEMPT
+        QuizAttempt.objects.create(
+
+            student=request.user,
+
+            course=course,
+
+            score=score,
+
+            total_questions=total_questions,
+
+            percentage=percentage,
+
+            passed=passed
+        )
+
         return render(request, "courses/quiz_result.html", {
+
             "score": score,
-            "total": total
+
+            "total": total_questions,
+
+            "percentage": percentage,
+
+            "passed": passed
         })
 
     return render(request, "courses/quiz.html", {
+
         "questions": questions,
+
         "course": course
     })
 
+@login_required
+def quiz_history(request):
+
+    attempts = QuizAttempt.objects.filter(
+        student=request.user
+    ).order_by('-attempted_at')
+
+    return render(
+        request,
+        'courses/quiz_history.html',
+        {
+            'attempts': attempts
+        }
+    )
+@login_required
+def leaderboard(request):
+
+    leaderboard_data = QuizAttempt.objects.values(
+        'student__username'
+    ).annotate(
+        average_score=Avg('percentage')
+    ).order_by('-average_score')[:10]
+
+    return render(
+        request,
+        'courses/leaderboard.html',
+        {
+            'leaderboard_data': leaderboard_data
+        }
+    )
 # GENERATE CERTIFICATE
 @login_required
 def generate_certificate(request, course_id):
@@ -263,6 +352,7 @@ def dashboard(request):
     student = request.user
 
     enrollments = Enrollment.objects.filter(student=student)
+
     total_courses = enrollments.count()
 
     total_lessons = Lesson.objects.count()
@@ -271,12 +361,56 @@ def dashboard(request):
         student=student
     ).count()
 
-    return render(request, "courses/dashboard.html", {
-        "total_courses": total_courses,
-        "total_lessons": total_lessons,
-        "completed_lessons": completed_lessons
-    })
+    attempts = QuizAttempt.objects.filter(
+        student=student
+    )
 
+    total_attempts = attempts.count()
+
+    average_score = 0
+
+    passed_count = attempts.filter(
+        passed=True
+    ).count()
+
+    latest_attempt = attempts.first()
+
+    if total_attempts > 0:
+
+        average_score = round(
+
+            sum(a.percentage for a in attempts) / total_attempts,
+
+            2
+        )
+
+    pass_percentage = 0
+
+    if total_attempts > 0:
+
+        pass_percentage = round(
+
+            (passed_count / total_attempts) * 100,
+
+            2
+        )
+
+    return render(request, "courses/dashboard.html", {
+
+        "total_courses": total_courses,
+
+        "total_lessons": total_lessons,
+
+        "completed_lessons": completed_lessons,
+
+        "total_attempts": total_attempts,
+
+        "average_score": average_score,
+
+        "pass_percentage": pass_percentage,
+
+        "latest_attempt": latest_attempt
+    })
 def register(request):
 
     if request.user.is_authenticated:
@@ -353,3 +487,4 @@ def home(request):
     return render(request, "courses/home.html", {
         "courses": courses
     })
+

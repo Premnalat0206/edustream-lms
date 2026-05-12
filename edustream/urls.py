@@ -5,6 +5,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from courses import views
 from courses.views import home
+from courses.assignment_views import (
+    assignment_list,
+    assignment_detail,
+    submit_assignment
+)
 
 from courses.views import (
     course_list,
@@ -17,6 +22,7 @@ from courses.views import (
     complete_lesson,
     lesson_detail
 )
+from courses.quiz_views import upload_quiz_csv
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +41,39 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path("login/", views.login_view, name="login"),
     path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
+    path(
+    'course/<int:course_id>/assignments/',
+    assignment_list,
+    name='assignment_list'
+),
+
+path(
+    'assignment/<int:assignment_id>/',
+    assignment_detail,
+    name='assignment_detail'
+),
+
+path(
+    'assignment/<int:assignment_id>/submit/',
+    submit_assignment,
+    name='submit_assignment'
+),
+path(
+    'upload-quiz-csv/',
+    upload_quiz_csv,
+    name='upload_quiz_csv'
+),
+path(
+    'quiz-history/',
+    views.quiz_history,
+    name='quiz_history'
+),
+path(
+    'leaderboard/',
+    views.leaderboard,
+    name='leaderboard'
+),
+    
 ]
 
 

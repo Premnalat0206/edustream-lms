@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+Which library is used for data analysis?,Pandas,Flask,Django,React,1
+Which library handles arrays?,NumPy,Vue,Spring,Angular,1
+Which library creates charts?,Matplotlib,Node,Express,Laravel,1
+Which library supports statistics?,SciPy,React,Django,Vue,1
+Which method reads CSV in Pandas?,read_csv,read_data,read_table,read_excel,1
+Which function shows first rows?,head(),top(),show(),first(),1
+Which method removes null values?,dropna,delete,remove,clean,1
+Which structure stores tabular data?,DataFrame,List,Tuple,Set,1
+Which method groups data?,groupby,collect,combine,join,1
+Which method calculates average?,mean(),avg(),average(),calc(),1
+Which method sorts values?,sort_values(),sort(),arrange(),order(),1
+Which library visualizes data?,Matplotlib,Flask,Django,Spring,1
+Which method merges datasets?,merge(),join_data(),combine(),union(),1
+Which method checks missing values?,isnull(),empty(),missing(),check(),1
+Which chart compares categories?,Bar Chart,Scatter Plot,Histogram,Line Plot,1
+Which chart shows distribution?,Histogram,Bar Chart,Pie Chart,Table,1
+Which library creates advanced visuals?,Seaborn,Django,React,Laravel,1
+Which method removes duplicates?,drop_duplicates(),unique(),delete(),clean(),1
+Which file format stores comma-separated data?,CSV,TXT,PDF,DOCX,1
+Which method exports CSV?,to_csv(),export_csv(),save_csv(),write_csv(),1

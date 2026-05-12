@@ -1,0 +1,21 @@
+question,option1,option2,option3,option4,correct_option
+Which keyword defines a function?,def,function,define,func,1
+Which data type stores text?,String,Integer,List,Tuple,1
+Which symbol is used for comments?,#,//,<!--,--,1
+Which loop repeats until condition fails?,while,for,repeat,loop,1
+Which keyword handles exceptions?,try,catch,handle,check,1
+Which function prints output?,print(),echo(),show(),display(),1
+Which collection stores key-value pairs?,Dictionary,List,Tuple,Set,1
+Which keyword creates a class?,class,object,define,struct,1
+Which operator checks equality?,==,=,!=,<=,1
+Which method adds item to list?,append(),insert(),push(),add(),1
+Which keyword imports modules?,import,include,require,using,1
+Which function gets user input?,input(),scan(),read(),enter(),1
+Which data type is immutable?,Tuple,List,Dictionary,Set,1
+Which loop iterates through sequence?,for,while,do,repeat,1
+Which keyword exits loop?,break,stop,exit,return,1
+Which keyword skips iteration?,continue,skip,next,pass,1
+Which library handles data analysis?,Pandas,Flask,Django,NumPy,1
+Which function returns length?,len(),count(),size(),length(),1
+Which operator performs exponentiation?,**,^,//,%,1
+Which keyword creates inheritance?,class,extends,inherit,super,1
